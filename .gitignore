@@ -1,0 +1,14 @@
+﻿# Claves y variables de entorno: nunca se suben
+.env
+.env.*
+
+# Python
+__pycache__/
+*.pyc
+.pytest_cache/
+.venv/
+venv/
+
+# Editor y sistema
+.vscode/
+.DS_Store
