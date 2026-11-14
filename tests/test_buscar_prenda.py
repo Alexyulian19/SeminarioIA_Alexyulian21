@@ -89,6 +89,15 @@ def test_mas_reservas_que_cantidad_nunca_da_negativo(catalogo):
     assert resultado["hay"] is False
 
 
+def test_cantidad_cero_no_hay():
+    catalogo_agotado = [fila("je-02", "Jean negro", "30", 95000, "SI", 0)]
+
+    resultado = buscar_prenda(catalogo_agotado, [], "je-02", "30")
+
+    assert resultado["unidades_libres"] == 0
+    assert resultado["hay"] is False
+
+
 def test_precio_cero_devuelve_none_para_consultar_precio(catalogo):
     resultado = buscar_prenda(catalogo, [], "go-01", "UNICA")
 
@@ -123,3 +132,7 @@ def test_talla_que_no_existe_lanza_error(catalogo):
 def test_catalogo_vacio_lanza_error():
     with pytest.raises(PrendaNoEncontrada):
         buscar_prenda([], [], "th-01", "41")
+
+
+def test_prenda_no_encontrada_es_lookup_error():
+    assert issubclass(PrendaNoEncontrada, LookupError)
