@@ -79,8 +79,8 @@ def buscar_prenda(
     Returns:
         Diccionario con:
         - nombre: el nombre de la prenda en el catálogo.
-        - precio: el precio de la fila en pesos, o None si es 0
-          («Consultar precio»).
+        - precio: el precio de la fila en pesos, o None si es 0 o está vacío
+          ("") («Consultar precio»).
         - unidades_libres: cantidad de la fila menos las reservadas de esa
           prenda y talla, nunca negativo; 0 si disponible no es «SI».
         - hay: True si unidades_libres es mayor que 0; si no, False.
@@ -106,7 +106,7 @@ def buscar_prenda(
         reservadas = _unidades_reservadas(reservas_activas, codigo, talla)
         unidades_libres = max(fila["cantidad"] - reservadas, 0)
 
-    precio = None if fila["precio"] == PRECIO_CONSULTAR else fila["precio"]
+    precio = None if fila["precio"] in (PRECIO_CONSULTAR, "") else fila["precio"]
 
     return {
         "nombre": fila["nombre"],

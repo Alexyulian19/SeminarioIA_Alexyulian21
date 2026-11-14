@@ -105,6 +105,15 @@ def test_precio_cero_devuelve_none_para_consultar_precio(catalogo):
     assert resultado["unidades_libres"] == 5
 
 
+def test_precio_vacio_devuelve_none():
+    # Una celda de precio vacía en la hoja también es «Consultar precio».
+    catalogo_sin_precio = [fila("je-02", "Jean negro", "30", "", "SI", 2)]
+
+    resultado = buscar_prenda(catalogo_sin_precio, [], "je-02", "30")
+
+    assert resultado["precio"] is None
+
+
 def test_no_modifica_las_listas_que_recibe(catalogo):
     reservas = [reserva("th-01", "41", 1)]
     catalogo_antes = copy.deepcopy(catalogo)
