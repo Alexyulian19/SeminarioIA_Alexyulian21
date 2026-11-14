@@ -13,12 +13,17 @@ class PrendaNoEncontrada(LookupError):
     """La prenda (código y talla) no está en la lista del catálogo."""
 
 
+def _es_misma_prenda(registro: dict, codigo: str, talla: str) -> bool:
+    """Dice si una fila del catálogo o una reserva es de ese código y esa talla."""
+    return registro["codigo"] == codigo and registro["talla"] == talla
+
+
 def _unidades_reservadas(reservas_activas: list[dict], codigo: str, talla: str) -> int:
     """Suma las unidades de las reservas activas de esa misma prenda y talla."""
     return sum(
         reserva["cantidad"]
         for reserva in reservas_activas
-        if reserva["codigo"] == codigo and reserva["talla"] == talla
+        if _es_misma_prenda(reserva, codigo, talla)
     )
 
 
@@ -37,7 +42,7 @@ def buscar_prenda(
         (
             fila_catalogo
             for fila_catalogo in catalogo
-            if fila_catalogo["codigo"] == codigo and fila_catalogo["talla"] == talla
+            if _es_misma_prenda(fila_catalogo, codigo, talla)
         ),
         None,
     )
