@@ -3,6 +3,7 @@
 Proyecto: Agente de WhatsApp y catálogo web para Urban (SeminarioIA_Alexyulian21)
 Estudiante: Alex Yulian Caviedes Córdoba
 Funcionalidad: HU-01 Consultar si una prenda está disponible en mi talla y cuánto vale (`buscar_prenda`)
+Semana 6: revisión y seguridad
 Asistente usado: Claude en chat (contrato y pruebas) y Claude Code en VS Code, modo agente con aprobación **Manual** de cada edición (implementación y refactor)
 
 ## Entradas
@@ -79,13 +80,50 @@ Asistente usado: Claude en chat (contrato y pruebas) y Claude Code en VS Code, m
 - **Verificación:** El contrato del README dice que la comparación es exacta; ninguna prueba cubre esos casos todavía.
 - **Commit relacionado:** No aplica (pendiente para una próxima historia)
 
+### Entrada 9
+
+- **Fecha:** 2026-11-14
+- **Prompt o sugerencia:** Con Claude Code (Opus 5.5) en VS Code, en modo Manual y solo lectura, usé el prompt de revisión de la semana (Rol, Contexto, Tarea, Formato, Restricciones): revisar `app/buscar_prenda.py`, las pruebas y el README contra el OWASP Top 10 2021, sin modificar archivos ni ejecutar comandos. Propuso una tabla de hallazgos separada en problemas seguros y sospechas, y la tabla de los 5 puntos de seguridad (inyección, secretos, contraseñas, control de acceso y dependencias).
+- **Decisión:** Aceptada
+- **Por qué:** Clasifiqué como reales los 5 hallazgos seguros: falta la prueba de cantidad 0 (H-03), no se prueba la herencia de `LookupError` (H-04), `or None` deja la regla implícita (H-05), falta `requires-python` (H-07) y la trazabilidad del CA-01.1. No hubo falsos positivos. Las sospechas (datos de la hoja como texto, reservas negativas, filas duplicadas, log injection) no las cuento como reales hasta tener el lector de la hoja; quedaron como pendientes. Los demás hallazgos no salieron de la IA: H-01 y H-02 vienen del linter y de la configuración previa, H-06 lo encontré yo con la lista de revisión y H-08 lo pedí yo después.
+- **Verificación:** Leí cada línea citada (por ejemplo `README.md:70` y `README.md:54`, sin prueba para esos límites), corrí pytest y ruff después de cada corrección y registré todo en `revision_seguridad.md`.
+- **Commit relacionado:** `3899f6d`, `ff05753`, `54e6a07`, `09ca9b5` (correcciones) y `ffa707c` (informe)
+
+### Entrada 10
+
+- **Fecha:** 2026-11-14
+- **Prompt o sugerencia:** Le pedí al agente de Claude Code crear la constante `PRECIO_CONSULTAR = 0` y cambiar `fila["precio"] or None` por una comparación explícita. Propuso `None if fila["precio"] == PRECIO_CONSULTAR else fila["precio"]` y lo subió en `ff05753` con el mensaje «Mismo comportamiento».
+- **Decisión:** Aceptada con cambios
+- **Por qué:** El mensaje era falso: con precio `""` el resultado pasó de `None` a `""`. Era el mismo cambio que yo había rechazado en la entrada 7. Ni el agente ni yo lo vimos al revisar el diff. Lo detectó Claude Code al leer esta bitácora para escribir el README. De las tres opciones que propuso (revertir, documentar o tratar `""` también como «Consultar precio»), elegí la tercera: conserva la constante y vuelve al comportamiento anterior. No reescribí el historial; el commit de la corrección cita a `ff05753`.
+- **Verificación:** Escribí primero `test_precio_vacio_devuelve_none` y la vi fallar (`assert '' is None`, 1 failed, 12 passed). Después cambié la comparación a `fila["precio"] in (PRECIO_CONSULTAR, "")`: 13 passed y ruff sin avisos.
+- **Commit relacionado:** `ff05753` (error), `ea6db49` (corrección) y `abedac2` (README e informe)
+
+### Entrada 11
+
+- **Fecha:** 2026-11-14
+- **Prompt o sugerencia:** Le di a Claude Code una tarea de agente en la rama `agente/revision-semana6`, con un commit por punto y pytest y ruff después de cada uno. Le di permisos mínimos: solo tocar `app/`, `tests/` y `pyproject.toml`; no instalar paquetes, no leer `.env`, no hacer push ni merge, y detenerse a preguntar si tenía que cambiar una prueba existente. Hizo 6 commits.
+- **Decisión:** Aceptada
+- **Por qué:** Respetó las restricciones y solo agregó pruebas nuevas. Trabajar en una rama aparte me dejó revisar todo antes de que llegara a `main`. Por honestidad: la corrección del precio vacío (`ea6db49` y `abedac2`) no pasó por esa rama, la hice directo en `main`. También ahí revisé el diff antes de aprobar cada commit.
+- **Verificación:** Revisé los cambios con `git diff main..agente/revision-semana6` y los integré con merge (fast-forward). Esa revisión no detectó el error de `ff05753` (entrada 10).
+- **Commit relacionado:** `3899f6d`, `ff05753`, `4eb3a40`, `54e6a07`, `09ca9b5`, `99db1bb` (rama del agente); `ea6db49`, `abedac2` (directo en `main`)
+
+### Entrada 12
+
+- **Fecha:** 2026-11-14
+- **Prompt o sugerencia:** Lección de la semana, a partir de las entradas 7 y 10.
+- **Decisión:** No aplica (lección)
+- **Por qué:** Que las pruebas sigan en verde no demuestra que el comportamiento no cambió si ninguna prueba cubre ese caso. `ff05753` pasó las 12 pruebas y aun así cambió el resultado para un precio vacío. En la entrada 7 ya había escrito que agregaría una prueba de caracterización antes de refactorizar, y no lo hice.
+- **Verificación:** La prueba `test_precio_vacio_devuelve_none` falla con el código de `ff05753` y pasa con la corrección. Desde ahora, antes de un refactor escribo las pruebas de los casos que el cambio podría tocar (vacíos, espacios, mayúsculas) y no confío en un mensaje de «mismo comportamiento» sin una prueba que lo respalde.
+- **Commit relacionado:** `ea6db49`
+
 ## Resumen
 
 | Decisión | Cantidad |
 |---|---|
-| Aceptadas | 3 |
-| Aceptadas con cambios | 3 |
+| Aceptadas | 5 |
+| Aceptadas con cambios | 4 |
 | Rechazadas | 2 |
+| No aplica (lección) | 1 |
 
 ## Errores que atraparon las pruebas
 
@@ -99,3 +137,5 @@ Usar el modo Manual de Claude Code me obligó a leer cada cambio antes de acepta
 En el refactor vi la diferencia entre mejorar la estructura y cambiar el comportamiento: rechacé un cambio que parecía inofensivo porque alteraba el caso de una celda vacía.
 Las pruebas pasaron siempre, pero eso me mostró que solo protegen lo que cubren.
 En la próxima funcionalidad escribiría primero las pruebas de datos raros de la hoja (vacíos, espacios, mayúsculas) y revisaría el contrato contra los datos reales antes de pedir código.
+En la semana 6 lo comprobé: un refactor con el mensaje «mismo comportamiento» pasó todas las pruebas y aun así cambió el resultado para un precio vacío.
+Las pruebas en verde no demuestran que el comportamiento no cambió si ninguna cubre ese caso; antes de refactorizar escribiré primero las pruebas de esos casos.
