@@ -1,4 +1,4 @@
-"""Pruebas de HU-01: buscar_prenda (contrato en el README, sección «Funcionalidad de la semana 5»)."""
+"""Pruebas de HU-01: buscar_prenda (contrato en el README)."""
 
 import copy
 
@@ -6,8 +6,7 @@ import pytest
 
 from app.buscar_prenda import PrendaNoEncontrada, buscar_prenda
 
-
-# ---------- Datos de prueba (códigos y tallas reales del catálogo, precios de ejemplo) ----------
+# ---------- Datos de prueba (códigos y tallas reales) ----------
 
 def fila(codigo, nombre, talla, precio, disponible, cantidad):
     """Arma una fila de la lista del catálogo."""
