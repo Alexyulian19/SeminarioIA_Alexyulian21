@@ -1,20 +1,60 @@
 # SeminarioIA_Alexyulian21
 
-Agente de WhatsApp y catálogo web para Urban, el almacén de ropa de Alex y su papá (Neiva).
-Seminario de IA aplicada al ciclo de vida del software, FET.
+## 1. Qué es
 
-## Funcionalidad de la semana 5
+Un agente de WhatsApp y un catálogo web para que los clientes de Urban, el almacén de ropa de mi familia en Neiva,
+consulten prendas, tallas y precios sin esperar a que el dueño les responda.
 
-### Historia de usuario (documento de requisitos de la semana 3)
+## 2. Requisitos
+
+- Python 3.11 o superior.
+- Dependencias de desarrollo en `requirements-dev.txt` (pytest y ruff, con versiones fijadas).
+- La app solo usa la librería estándar de Python.
+
+## 3. Instalación
+
+En Windows PowerShell:
+
+```powershell
+git clone https://github.com/Alexyulian19/SeminarioIA_Alexyulian21.git
+cd SeminarioIA_Alexyulian21
+python -m venv .venv
+.\.venv\Scripts\Activate.ps1
+pip install -r requirements-dev.txt
+copy .env.example .env
+```
+
+Si PowerShell no deja ejecutar `Activate.ps1`, ejecuta una vez
+`Set-ExecutionPolicy -Scope CurrentUser RemoteSigned` y vuelve a intentarlo.
+El archivo `.env` es solo local (está en `.gitignore`); llena allí tus claves reales, nunca en `.env.example`.
+
+## 4. Ejecución
+
+El webhook de WhatsApp todavía no existe. Hoy la funcionalidad disponible es la función `buscar_prenda`,
+que se puede probar desde la raíz del proyecto con un catálogo de una fila:
+
+```powershell
+python -c "from app.buscar_prenda import buscar_prenda; catalogo = [{'codigo': 'th-01', 'nombre': 'Tenis urbano blanco y dorado', 'talla': '41', 'precio': 150000, 'disponible': 'SI', 'cantidad': 3}]; print(buscar_prenda(catalogo, [], 'th-01', '41'))"
+```
+
+Salida:
+
+```text
+{'nombre': 'Tenis urbano blanco y dorado', 'precio': 150000, 'unidades_libres': 3, 'hay': True}
+```
+
+### Funcionalidad de la semana 5: HU-01
+
+#### Historia de usuario (documento de requisitos de la semana 3)
 
 **HU-01 (Must).** Como cliente, quiero preguntar si una prenda está disponible en mi talla y cuánto vale
 para decidir mi compra sin esperar a que el dueño me responda. Necesidad de origen: N-01.
 
-**Criterios de aceptación**
+#### Criterios de aceptación
 
-- **CA-01.1 (prenda disponible):** Dado que en la lista del catálogo la «Polo azul» talla M tiene 3 unidades a $80.000,
-  cuando el cliente escribe «¿tiene la polo azul en M?», entonces el asistente responde que sí hay en talla M
-  y que el precio es $80.000.
+- **CA-01.1 (prenda disponible):** Dado que en la lista del catálogo el «Tenis urbano blanco y dorado» (`th-01`) talla 41
+  tiene 3 unidades a $150.000, cuando el cliente escribe «¿tiene el tenis urbano blanco y dorado en 41?», entonces el asistente
+  responde que sí hay en talla 41 y que el precio es $150.000.
 - **CA-01.2 (error, prenda que no está en el catálogo):** Dado que la lista del catálogo no tiene ninguna «chaqueta de cuero»,
   cuando el cliente pregunta por una chaqueta de cuero, entonces el asistente responde que el almacén no la tiene
   en el catálogo y no menciona ningún precio para ella.
@@ -22,7 +62,7 @@ para decidir mi compra sin esperar a que el dueño me responda. Necesidad de ori
 Esta funcionalidad es la herramienta `buscar_prenda` del diseño de la semana 4: el precio y las unidades
 salen siempre de la lista del catálogo y de las reservas activas, nunca del modelo (RNF-03: nunca ofrecer una prenda agotada).
 
-### Contrato
+#### Contrato
 
 ```python
 def buscar_prenda(
@@ -72,11 +112,12 @@ def buscar_prenda(
 - Si no hay reservas activas, devuelve la `cantidad` de la fila.
 - Si el catálogo está vacío, lanza `PrendaNoEncontrada`.
 - Si `precio` es 0, devuelve `precio = None` para que el asistente diga «Consultar precio» y nunca invente un valor.
+- Si `precio` está vacío (`""`), devuelve `precio = None`.
 
 **Ejemplos** (códigos y tallas reales del catálogo; los precios y unidades son de ejemplo hasta cargar los productos)
 
 | Fila del catálogo | Reservas activas de esa prenda | Llamada | Resultado |
-|---|---|---|---|
+| --- | --- | --- | --- |
 | th-01, Tenis urbano blanco y dorado, 41, $150.000, SI, cantidad 3 | ninguna | `("th-01", "41")` | `{"nombre": "Tenis urbano blanco y dorado", "precio": 150000, "unidades_libres": 3, "hay": True}` (CA-01.1) |
 | je-01, Jean azul clásico, 32, $90.000, SI, cantidad 2 | una de 1 unidad | `("je-01", "32")` | `{"nombre": "Jean azul clásico", "precio": 90000, "unidades_libres": 1, "hay": True}` |
 | je-01, Jean azul clásico, 32, $90.000, SI, cantidad 2 | dos de 1 unidad | `("je-01", "32")` | `{..., "unidades_libres": 0, "hay": False}` |
@@ -85,11 +126,39 @@ def buscar_prenda(
 | (no hay chaqueta de cuero) | — | `("ch-01", "L")` | `PrendaNoEncontrada` (CA-01.2) |
 | th-01, Tenis urbano blanco y dorado, 41, ... | — | `("th-01", "45")` | `PrendaNoEncontrada` (talla que no existe) |
 
-### Cómo ejecutar las pruebas
+## 5. Pruebas
 
-Requisitos: Python 3.11 o más y pytest.
+Con el entorno virtual activado, desde la raíz del proyecto:
 
-```bash
-pip install pytest
+```powershell
 pytest
+ruff check --select E,F,B,S .
 ```
+
+Hay 13 pruebas de HU-01 en `tests/test_buscar_prenda.py`: casos normales, casos límite del contrato y casos de error.
+
+## 6. Estructura
+
+| Ruta | Contenido |
+| --- | --- |
+| `app/` | Código de la aplicación (`buscar_prenda.py`, HU-01). |
+| `tests/` | Pruebas con pytest. |
+| `pyproject.toml` | Versión de Python y configuración de pytest y ruff. |
+| `requirements-dev.txt` | Dependencias de desarrollo con versiones fijadas. |
+| `.env.example` | Plantilla de variables de entorno, con valores de relleno. |
+| `revision_seguridad.md` | Informe de revisión de código y seguridad (semana 6). |
+| `bitacora_ia.md` | Bitácora de uso de IA. |
+
+## 7. Uso de IA
+
+- Claude en chat ayudó a redactar el contrato y las pruebas de HU-01, y Claude Code en VS Code (modo Manual) implementó y refactorizó `buscar_prenda`.
+- Cada sugerencia se verificó con pytest y contra el catálogo real, y se aceptó, se ajustó o se rechazó (por ejemplo, se quitó un parámetro `color` que el catálogo no tiene).
+- En la semana 6, Claude Code revisó el código en modo solo lectura y un agente aplicó las correcciones en una rama aparte, que revisé antes del merge.
+
+Detalle en [bitacora_ia.md](bitacora_ia.md) y en [revision_seguridad.md](revision_seguridad.md).
+
+## 8. Autor y licencia
+
+Alex Yulian Caviedes Córdoba. FET, Seminario de IA aplicada al ciclo de vida del software, 2026.
+
+Licencia: Uso académico, todos los derechos reservados.

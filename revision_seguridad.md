@@ -35,7 +35,7 @@
 | H-02 | raíz | Faltaban `.env.example` y dependencias fijadas | A05 / A06 | media | Agregar `.env.example` con valores de relleno y `requirements-dev.txt` con versiones fijadas | `0129c83` |
 | H-03 | `tests/test_buscar_prenda.py` | Falta prueba del límite «cantidad 0» del README | Cobertura | media | Prueba `test_cantidad_cero_no_hay` | `3899f6d` |
 | H-04 | `tests/test_buscar_prenda.py` | No se probaba que `PrendaNoEncontrada` herede de `LookupError` | Cobertura | baja | Prueba `test_prenda_no_encontrada_es_lookup_error` | `3899f6d` |
-| H-05 | `app/buscar_prenda.py` | `fila["precio"] or None` dejaba la regla implícita | Legibilidad / valor mágico | baja | Constante `PRECIO_CONSULTAR` y comparación explícita | `ff05753` |
+| H-05 | `app/buscar_prenda.py` | `fila["precio"] or None` dejaba la regla implícita | Legibilidad / valor mágico | baja | Constante `PRECIO_CONSULTAR` y comparación explícita. `ff05753` cambió el caso `precio == ""` (devolvía `""` en lugar de `None`, decisión ya rechazada en la entrada 7 de la bitácora); se corrigió con `fila["precio"] in (PRECIO_CONSULTAR, "")` y la prueba `test_precio_vacio_devuelve_none` | `ff05753`, `ea6db49` |
 | H-06 | `app/buscar_prenda.py` | Condición código + talla duplicada | Duplicación | baja | Función privada `_es_misma_prenda`, usada en los dos lugares | `4eb3a40` |
 | H-07 | `pyproject.toml` | No declaraba Python 3.11 | Configuración | baja | `[project]` con `requires-python = ">=3.11"` y `version = "0.1.0"`; `target-version = "py311"` en ruff | `54e6a07`, `09ca9b5` |
 | H-08 | `app/buscar_prenda.py` | Docstrings sin Args, Returns ni Raises | Documentación | baja | Docstrings en español con Args, Returns y Raises, según el README | `99db1bb` |
@@ -58,9 +58,9 @@ Herramienta: Claude Code (Opus 5.5) en VS Code, en modo Manual y solo lectura, c
 | --- | --- | --- |
 | Falta prueba de cantidad 0 | Real | Leí `README.md:70` y no había prueba para ese límite; corrí pytest tras agregarla (12 pasan). |
 | No se prueba la herencia de `LookupError` | Real | Leí `README.md:54` y ninguna prueba lo comprobaba; corrí pytest tras agregarla. |
-| `fila["precio"] or None` deja la regla implícita | Real | Leí `app/buscar_prenda.py:53`; tras cambiarlo por `PRECIO_CONSULTAR`, pytest siguió en verde sin tocar las pruebas. |
+| `fila["precio"] or None` deja la regla implícita | Real | Leí `app/buscar_prenda.py:53`; tras cambiarlo por `PRECIO_CONSULTAR`, pytest siguió en verde sin tocar las pruebas, pero no cubría el precio vacío; ver H-05. |
 | Falta `requires-python` | Real | Leí `pyproject.toml` y no declaraba la versión de Python; corrí ruff y pytest tras agregarla. |
-| Trazabilidad del CA-01.1 (README usa «Polo azul», la prueba usa `th-01`) | Real, menor | Comparé `README.md:15` con `tests/test_buscar_prenda.py:41`. Queda pendiente. |
+| Trazabilidad del CA-01.1 (README usa «Polo azul», la prueba usa `th-01`) | Real, menor | Comparé `README.md:15` con `tests/test_buscar_prenda.py:41`. Corregido en el README: el CA-01.1 ahora usa `th-01`. |
 
 - **Falsos positivos:** ninguno. Las sospechas que dependen de los datos reales (sección 4) no se clasifican como reales hasta tener el lector de la hoja.
 - **Lo que la IA no encontró:** la condición código + talla duplicada (H-06). La encontré yo con la lista de revisión.
@@ -73,7 +73,6 @@ Herramienta: Claude Code (Opus 5.5) en VS Code, en modo Manual y solo lectura, c
 | Reservas con cantidad negativa aumentarían las unidades libres | La base de datos en Supabase aún no está creada. | `CHECK (cantidad >= 1)` en la tabla de reservas. |
 | Filas duplicadas en la hoja | El lector de la hoja aún no existe. | Validar al cargar la hoja. |
 | Log injection por el mensaje de `PrendaNoEncontrada` (incluye código y talla) | Todavía no hay logging. | Sanear el texto cuando se agregue logging. |
-| Trazabilidad del CA-01.1 en el README | El agente solo podía tocar `app/`, `tests/` y `pyproject.toml`. | Usar un producto real del catálogo en el CA-01.1 o explicar la relación con `th-01`. |
 | Las pruebas se corrieron en Python 3.13, no en 3.11 | El entorno virtual usa Python 3.13. | Correr las pruebas en Python 3.11. |
 
 ### Claves expuestas
