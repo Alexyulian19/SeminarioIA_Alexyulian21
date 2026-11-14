@@ -1,8 +1,13 @@
+[project]
+name = "seminarioia-alexyulian21"
+requires-python = ">=3.11"
+
 [tool.pytest.ini_options]
 pythonpath = ["."]
 
 [tool.ruff]
 line-length = 88
+target-version = "py311"
 
 [tool.ruff.lint]
 select = ["E", "F", "B", "S", "I"]
