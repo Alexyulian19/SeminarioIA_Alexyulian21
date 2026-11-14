@@ -1,7 +1,7 @@
 ﻿# Claves y variables de entorno: nunca se suben
 .env
 .env.*
-
+!.env.example
 # Python
 __pycache__/
 *.pyc
