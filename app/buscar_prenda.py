@@ -5,6 +5,8 @@ reservas activas, nunca del modelo (RNF-03). Contrato en el README.
 """
 
 DISPONIBLE = "SI"
+# Precio de la lista que significa «Consultar precio», igual que en la web.
+PRECIO_CONSULTAR = 0
 
 
 class PrendaNoEncontrada(LookupError):
@@ -47,10 +49,11 @@ def buscar_prenda(
         reservadas = _unidades_reservadas(reservas_activas, codigo, talla)
         unidades_libres = max(fila["cantidad"] - reservadas, 0)
 
+    precio = None if fila["precio"] == PRECIO_CONSULTAR else fila["precio"]
+
     return {
         "nombre": fila["nombre"],
-        # Precio 0 significa «Consultar precio»: se devuelve None.
-        "precio": fila["precio"] or None,
+        "precio": precio,
         "unidades_libres": unidades_libres,
         "hay": unidades_libres > 0,
     }
