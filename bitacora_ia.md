@@ -4,7 +4,8 @@ Proyecto: Agente de WhatsApp y catálogo web para Urban (SeminarioIA_Alexyulian2
 Estudiante: Alex Yulian Caviedes Córdoba
 Funcionalidad: HU-01 Consultar si una prenda está disponible en mi talla y cuánto vale (`buscar_prenda`)
 Semana 6: revisión y seguridad
-Asistente usado: Claude en chat (contrato y pruebas) y Claude Code en VS Code, modo agente con aprobación **Manual** de cada edición (implementación y refactor)
+Semana 7: pruebas con IA de las reglas de reservas (`app/reservas.py`)
+Asistente usado: Claude en chat (contrato y pruebas) y Claude Code en VS Code, modo agente con aprobación **Manual** de cada edición (implementación y refactor). En la semana 7, Claude en la nube trabajó en la rama `semana7-pruebas` a partir de mis reglas y decisiones, y yo revisé y confirmé cada decisión antes del pull request.
 
 ## Entradas
 
@@ -116,18 +117,56 @@ Asistente usado: Claude en chat (contrato y pruebas) y Claude Code en VS Code, m
 - **Verificación:** La prueba `test_precio_vacio_devuelve_none` falla con el código de `ff05753` y pasa con la corrección. Desde ahora, antes de un refactor escribo las pruebas de los casos que el cambio podría tocar (vacíos, espacios, mayúsculas) y no confío en un mensaje de «mismo comportamiento» sin una prueba que lo respalde.
 - **Commit relacionado:** `ea6db49`
 
+### Entrada 13
+
+- **Fecha:** 2026-11-22
+- **Prompt o sugerencia:** Prompt 1 de clase (rol: analista de pruebas; tarea: casos con particiones, límites y tabla de decisión, sin código; el esperado sale de la regla y se señala lo ambiguo) para las cuatro reglas de reservas. La primera propuesta de la IA tomaba «precio 0 o None» como el único precio inválido, no ponía máximo de unidades y dejaba como duda si a las 24 h exactas la reserva ya vence.
+- **Decisión:** Aceptada con cambios
+- **Por qué:** Contesté las ambigüedades con lo que pasa en la tienda: «si vence a las 24 horas»; el producto más barato vale 40.000 (una gorra), así que un precio menor es un error; «lo normal es 4 o 5» unidades por reserva, y se tomó 5 como máximo; y se pueden pedir «las que queden». Eso agregó los límites 39.999/40.000, cantidad 5/6 y libres = cantidad. «Nu Bank» y «Nequí» quedaron como ambigüedades abiertas.
+- **Verificación:** Revisé la propuesta con las 5 preguntas de clase (particiones, límites, origen del esperado, ambigüedades y reglas inventadas). Cada fila de las tablas cita la regla de la sección 1 de `registro_pruebas.md`.
+- **Commit relacionado:** `0266080` (reglas) y `808610c` (tablas de casos y tabla de decisión)
+
+### Entrada 14
+
+- **Fecha:** 2026-11-22
+- **Prompt o sugerencia:** Prompt 2 de clase (rol: desarrollador que escribe pruebas con pytest; contexto: `app/reservas.py` y el registro; una fila de `parametrize` por caso, `pytest.raises(ValueError)`, esperados fijos, sin tocar `app/`). La IA generó `tests/test_reservas.py` con 47 pruebas.
+- **Decisión:** Aceptada con cambios
+- **Por qué:** Los esperados salían de la regla y usaba `is True`/`is False` y el tipo de error exacto, pero: los ids automáticos (`[creada_en0-ahora0-False]`) no dejaban saber qué caso cubría cada prueba; 3 líneas rompían ruff (E501); y en `puede_reservar` había filas redundantes. Rompí cada condición por separado y D4, D6, D7 y D8 nunca fallaron, así que las descarté. También uní R4-2 con D2 y R4-6 con D3. Quedaron 41 pruebas. Detalle en la sección 2 del registro.
+- **Verificación:** `python -m pytest -q`: 47 passed antes y 41 passed después (54 con las de `buscar_prenda`). `ruff check .` limpio. `git diff 5ae9101 7a66586 -- tests/test_reservas.py` muestra la revisión.
+- **Commit relacionado:** `5ae9101` (tal como la dio la IA) y `7a66586` (revisión)
+
+### Entrada 15
+
+- **Fecha:** 2026-11-22
+- **Prompt o sugerencia:** No es un prompt: rompí el código a propósito 5 veces, una a la vez, y deshice cada cambio con `git restore app/reservas.py`.
+- **Decisión:** No aplica (verificación)
+- **Por qué:** Cuatro cambios los detectó la suite (`<=` por `<`, `>=` por `>`, `*` por `+` y `<` por `<=` en el precio mínimo). El cambio `strip()` por `strip(" ")` **no lo detectó ninguna prueba**: todas pasaban con espacios, pero un mensaje de WhatsApp puede llegar con un salto de línea al final. Agregué el caso R2-13 `"nequi\n"` → `"nequi"`.
+- **Verificación:** Con `strip(" ")`, R2-13 falla (1 failed, 54 passed); con el código bueno, 55 passed. Tabla en la sección 3 del registro.
+- **Commit relacionado:** `e5abce5`
+
+### Entrada 16
+
+- **Fecha:** 2026-11-22
+- **Prompt o sugerencia:** Prompt 3 de clase adaptado (rol: analista que prepara datos; tienda de ropa urbana en Neiva; 15 reservas variadas y 5 casos difíciles; CSV; ninguna persona real; teléfonos 300 000 xxxx; sin la columna del esperado).
+- **Decisión:** Aceptada con cambios
+- **Por qué:** Dos nombres tenían apellidos del docente del seminario (Trujillo y Artunduaga): los cambié para que ningún dato se parezca a una persona conocida. La columna `forma_pago_esperada` la llené con la regla 2 y no la dejé a la IA, para que el oráculo siga siendo la regla.
+- **Verificación:** Revisé que ningún nombre fuera de una persona real y que estuvieran los casos difíciles (tildes, ñ, apóstrofo, cliente vacío, salto de línea, forma de pago vacía). `test_datos_sinteticos_son_ficticios` comprueba las 20 filas y el patrón de teléfono. 57 passed.
+- **Commit relacionado:** `0a7ab12`
+
 ## Resumen
 
 | Decisión | Cantidad |
 |---|---|
 | Aceptadas | 5 |
-| Aceptadas con cambios | 4 |
+| Aceptadas con cambios | 7 |
 | Rechazadas | 2 |
-| No aplica (lección) | 1 |
+| No aplica (lección o verificación) | 2 |
 
 ## Errores que atraparon las pruebas
 
 Con el esqueleto, las 10 pruebas fallaron con `NotImplementedError`, lo que confirmó que fallaban por la razón correcta antes de pedir el código. El código que generó el asistente pasó las 10 pruebas en el primer intento, así que ninguna prueba falló con él. Lo más importante salió en el refactor: la propuesta 4 cambiaba el resultado para una celda de precio vacía (`""`) y **ninguna de mis pruebas lo habría detectado**, porque no tengo una prueba con precio vacío. Lo atrapó la revisión, no las pruebas. La próxima vez agregaría una prueba de caracterización para ese caso antes de refactorizar.
+
+En la semana 7 rompí el código a propósito: las pruebas atraparon 4 de los 5 cambios. El quinto (`strip(" ")`, que deja los saltos de línea) no lo atrapó ninguna, y por eso se agregó el caso R2-13.
 
 ## Reflexión final (5 a 8 líneas)
 
@@ -139,3 +178,6 @@ Las pruebas pasaron siempre, pero eso me mostró que solo protegen lo que cubren
 En la próxima funcionalidad escribiría primero las pruebas de datos raros de la hoja (vacíos, espacios, mayúsculas) y revisaría el contrato contra los datos reales antes de pedir código.
 En la semana 6 lo comprobé: un refactor con el mensaje «mismo comportamiento» pasó todas las pruebas y aun así cambió el resultado para un precio vacío.
 Las pruebas en verde no demuestran que el comportamiento no cambió si ninguna cubre ese caso; antes de refactorizar escribiré primero las pruebas de esos casos.
+
+**Semana 7.** Lo más útil fue romper el código: una suite con 54 pruebas en verde todavía tenía un hueco (los saltos de línea de WhatsApp) y solo apareció cuando cambié el código a propósito.
+También vi que más pruebas no es mejor: 4 filas de la tabla de decisión nunca fallaban, porque con condiciones unidas con «y» basta una fila por cada condición que falla sola.
