@@ -135,14 +135,24 @@ pytest
 ruff check --select E,F,B,S .
 ```
 
-Hay 13 pruebas de HU-01 en `tests/test_buscar_prenda.py`: casos normales, casos límite del contrato y casos de error.
+Hay 57 pruebas:
+
+- 13 de HU-01 en `tests/test_buscar_prenda.py`: casos normales, casos límite del contrato y casos de error.
+- 44 de las reglas de reservas (semana 7) en `tests/test_reservas.py`: vencimiento de 24 h, forma de pago,
+  total y si se puede reservar. Cada fila de `parametrize` lleva el id de su caso (por ejemplo `R1-5` o `D2`),
+  y algunas pruebas usan los datos sintéticos de `tests/datos/` a través del fixture de `tests/conftest.py`.
+
+Las reglas, las tablas de casos, la revisión de las pruebas de la IA y los cambios para romper el código
+están en [registro_pruebas.md](registro_pruebas.md).
 
 ## 6. Estructura
 
 | Ruta | Contenido |
 | --- | --- |
-| `app/` | Código de la aplicación (`buscar_prenda.py`, HU-01). |
-| `tests/` | Pruebas con pytest. |
+| `app/` | Código de la aplicación: `buscar_prenda.py` (HU-01) y `reservas.py` (reglas de las reservas). |
+| `tests/` | Pruebas con pytest y `conftest.py` con el fixture de datos sintéticos. |
+| `tests/datos/` | Datos sintéticos de reservas (CSV, ninguna persona real). |
+| `registro_pruebas.md` | Registro de pruebas de la semana 7. |
 | `pyproject.toml` | Versión de Python y configuración de pytest y ruff. |
 | `requirements-dev.txt` | Dependencias de desarrollo con versiones fijadas. |
 | `.env.example` | Plantilla de variables de entorno, con valores de relleno. |
@@ -154,8 +164,9 @@ Hay 13 pruebas de HU-01 en `tests/test_buscar_prenda.py`: casos normales, casos 
 - Claude en chat ayudó a redactar el contrato y las pruebas de HU-01, y Claude Code en VS Code (modo Manual) implementó y refactorizó `buscar_prenda`.
 - Cada sugerencia se verificó con pytest y contra el catálogo real, y se aceptó, se ajustó o se rechazó (por ejemplo, se quitó un parámetro `color` que el catálogo no tiene).
 - En la semana 6, Claude Code revisó el código en modo solo lectura y un agente aplicó las correcciones en una rama aparte, que revisé antes del merge.
+- En la semana 7, la IA propuso los casos, las pruebas y los datos sintéticos a partir de mis reglas. Cada prueba se revisó con las tres preguntas (esperado de la regla, fallaría si rompo el código, no redundante) y el código se rompió a propósito 5 veces (rama `semana7-pruebas`).
 
-Detalle en [bitacora_ia.md](bitacora_ia.md) y en [revision_seguridad.md](revision_seguridad.md).
+Detalle en [bitacora_ia.md](bitacora_ia.md), [revision_seguridad.md](revision_seguridad.md) y [registro_pruebas.md](registro_pruebas.md).
 
 ## 8. Autor y licencia
 

@@ -1,0 +1,22 @@
+cliente,barrio,telefono,codigo,talla,cantidad,forma_pago_escrita,forma_pago_esperada
+Camila Rojas Perdomo,Altico,300 000 0101,th-01,41,1,efectivo,efectivo
+Julián Andrés Cerquera,Las Granjas,300 000 0102,je-01,32,2,Nequi,nequi
+Valentina Cuéllar,Cándido Leguízamo,300 000 0103,bu-01,M,1,daviplata,daviplata
+Santiago Polanía,Santa Inés,300 000 0104,go-01,UNICA,3,NU,nu
+Mariana Ospina Vargas,El Jardín,300 000 0105,th-01,40,1,Efectivo,efectivo
+Daniel Esteban Charry,Calixto,300 000 0106,je-01,30,1, nequi ,nequi
+Laura Sofía Medina,Ipanema,300 000 0107,go-01,UNICA,5,DAVIPLATA,daviplata
+Kevin Alejandro Tovar,Siete de Agosto,300 000 0108,bu-01,L,2,efectivo,efectivo
+Paula Andrea Cabrera,Buganviles,300 000 0109,th-01,42,1,Nu,nu
+Sebastián Lozada,Las Palmas,300 000 0110,je-01,34,1,nequi,nequi
+Natalia Quintero,Timanco,300 000 0111,go-01,UNICA,2,transferencia,ERROR
+Andrés Felipe Silva,La Gaitana,300 000 0112,bu-01,S,1,Bancolombia,ERROR
+Isabella Ramírez,Primero de Mayo,300 000 0113,th-01,39,1,efectivo,efectivo
+Mateo Gutiérrez,Quirinal,300 000 0114,je-01,28,4,Daviplata,daviplata
+Juliana Motta Puentes,Rodrigo Lara,300 000 0115,go-01,UNICA,1,Nu Bank,ERROR
+José Ángel Ñañez Bermúdez,Las Américas,300 000 0116,th-01,43,1,Nequí,ERROR
+María Peña Sánchez,Los Mártires,300 000 0117,bu-01,XL,1,"nequi
+",nequi
+Luz Dary D'Alessandro,Cándido Leguízamo,300 000 0118,je-01,32,2,efectivo ,efectivo
+,El Jardín,300 000 0119,go-01,UNICA,1,daviplata,daviplata
+Óscar Iván Muñoz,Altico,300 000 0120,th-01,41,1,,ERROR
