@@ -4,6 +4,7 @@ Los esperados son fijos y salen de las reglas de registro_pruebas.md, sección 1
 Los ids de cada fila (R1-1, D2...) son los de las tablas de casos.
 """
 
+import re
 from datetime import datetime
 
 import pytest
@@ -157,3 +158,24 @@ def test_puede_reservar_libres_negativo_lanza_error():
     # R4-9 partición inválida: unidades libres negativas
     with pytest.raises(ValueError):
         puede_reservar("SI", -1, 1)
+
+
+# ---------- Datos sintéticos (fixture reservas_sinteticas) ----------
+
+def test_datos_sinteticos_son_ficticios(reservas_sinteticas):
+    # 20 reservas, todas con teléfono del patrón ficticio 300 000 xxxx
+    assert len(reservas_sinteticas) == 20
+    for fila in reservas_sinteticas:
+        assert re.fullmatch(r"300 000 \d{4}", fila["telefono"]), fila["telefono"]
+
+
+def test_forma_de_pago_de_las_reservas_sinteticas(reservas_sinteticas):
+    # Cada fila trae la forma de pago como la escribió el cliente y el
+    # esperado que salió de la regla 2 (ERROR = ValueError).
+    for fila in reservas_sinteticas:
+        if fila["forma_pago_esperada"] == "ERROR":
+            with pytest.raises(ValueError):
+                normalizar_forma_pago(fila["forma_pago_escrita"])
+        else:
+            esperado = fila["forma_pago_esperada"]
+            assert normalizar_forma_pago(fila["forma_pago_escrita"]) == esperado

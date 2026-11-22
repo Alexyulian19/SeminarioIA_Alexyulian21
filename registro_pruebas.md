@@ -179,8 +179,9 @@ D4, D6, D7 y D8 no fallaron con ninguno de los tres cambios.
 con el tipo exacto, esperados escritos como números y no tocó `app/`. No usó `pytest.approx` porque no hay
 decimales (pesos enteros), como pide la regla.
 
-**Lo que no se agregó:** «Nequí» con tilde. La ambigüedad de la regla 2 sigue abierta; una prueba fijaría
-una regla que el negocio no ha decidido.
+**Lo que no se agregó:** una prueba unitaria para «Nequí» con tilde. La ambigüedad de la regla 2 sigue
+abierta. En los datos sintéticos (sección 4) esa fila espera ValueError porque es lo que dice la regla
+hoy. Si el negocio decide aceptarla, primero se cambia la regla y después el esperado.
 
 ## 3. Romper el código a propósito
 
@@ -195,3 +196,34 @@ Cada cambio se hizo solo, en `app/reservas.py`, se ejecutó `python -m pytest -q
 | `precio < PRECIO_MINIMO` por `precio <= PRECIO_MINIMO` (rechazaría la gorra de 40.000) | `app/reservas.py:70` | Sí, `test_calcular_total[R3-2]` | Nada: el borde de 40.000 está cubierto |
 | `texto.strip()` por `texto.strip(" ")` (solo quita espacios, no saltos de línea) | `app/reservas.py:47` | **No**: 54 passed | Agregué R2-13 `"nequi\n"` → `"nequi"`. Con el código roto ahora falla `test_normalizar_forma_pago[R2-13]`; con el código bueno pasa |
 | Cada condición de `puede_reservar` cambiada por `True`, una a la vez (ver sección 2) | `app/reservas.py:93-95` | Sí: sin C1 fallan R4-8 y D5; sin C2, R4-4 y D3; sin C3, R4-7 y D2 | Sirvió para descartar D4, D6, D7 y D8, que no fallaban con ninguno |
+
+## 4. Datos de prueba
+
+**Origen:** sintéticos generados con IA (Claude, prompt 3 de la clase adaptado a Urban: «tienda de ropa
+urbana en Neiva que recibe reservas por WhatsApp…, ninguna persona real, teléfonos 300 000 xxxx»).
+Confirmo que no hay datos de personas reales.
+
+- Archivo: `tests/datos/reservas_sinteticas.csv` (20 filas). Columnas: cliente, barrio, telefono, codigo,
+  talla, cantidad, forma_pago_escrita y forma_pago_esperada.
+- Fixture: `reservas_sinteticas` en `tests/conftest.py`, que lee el CSV en UTF-8 con `csv.DictReader`.
+- Pruebas que lo usan: `test_datos_sinteticos_son_ficticios` (20 filas, todos los teléfonos con el patrón
+  300 000 xxxx) y `test_forma_de_pago_de_las_reservas_sinteticas`.
+- La columna `forma_pago_esperada` no la generó la IA: se llenó con la regla 2 (ERROR = ValueError),
+  para que el oráculo siga siendo la regla y no el código.
+- Contexto local: barrios de Neiva (Altico, Cándido Leguízamo, Las Granjas, Timanco, Quirinal…), códigos de
+  prenda del catálogo (th-01, je-01, bu-01, go-01), tallas reales (41, 32, M, UNICA) y cantidades de 1 a 5.
+
+**Revisión de los datos generados:**
+- Dos nombres llevaban apellidos del docente del seminario (Trujillo y Artunduaga). Los cambié por
+  «Julián Andrés Cerquera» y «Juliana Motta Puentes» para que ningún dato se parezca a una persona real
+  conocida.
+- Revisé que ningún nombre fuera de una persona famosa y que los 20 teléfonos siguieran el patrón ficticio.
+
+**Casos difíciles incluidos:**
+- Tildes y ñ: «José Ángel Ñañez Bermúdez», «María Peña Sánchez», «Óscar Iván Muñoz».
+- Apóstrofo: «Luz Dary D'Alessandro».
+- Cliente vacío (fila 19): la forma de pago se sigue validando bien.
+- Forma de pago vacía (fila 20) → ValueError.
+- Salto de línea dentro de la celda (`"nequi\n"`, fila 17) y espacio de más (`"efectivo "`, `" nequi "`).
+- Formas no aceptadas: «transferencia», «Bancolombia», «Nu Bank» y «Nequí» con tilde → ValueError.
+- Mayúsculas: «NU», «DAVIPLATA», «Efectivo».
