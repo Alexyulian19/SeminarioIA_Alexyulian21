@@ -60,9 +60,11 @@ cliente cuál de las cuatro quiere.
 | R2-10 | Partición inválida | Nombre comercial con más palabras | `"Nu Bank"` | ValueError | `test_normalizar_forma_pago_invalida_lanza_error[R2-10]` |
 | R2-11 | Límite (texto vacío) | Vacío | `""` | ValueError | `test_normalizar_forma_pago_invalida_lanza_error[R2-11]` |
 | R2-12 | Límite (texto vacío) | Solo espacios | `"   "` | ValueError | `test_normalizar_forma_pago_invalida_lanza_error[R2-12]` |
+| R2-13 | Partición válida (agregada al romper el código) | Salto de línea al final, como cuando el cliente pulsa Enter | `"nequi\n"` | `"nequi"` | `test_normalizar_forma_pago[R2-13]` |
 
 **Ambigüedades encontradas:**
 - «Transferencia» sola: resuelta como ValueError; el agente pregunta cuál de las tres cuentas quiere.
+- ¿Un salto de línea o una tabulación cuentan como «espacio»? Resuelta: sí, porque en WhatsApp el texto puede llegar con un salto de línea al final. Salió al romper el código (sección 3), caso R2-13.
 - «Nu Bank» y «Nequí» (con tilde): **abiertas**. Por ahora son ValueError porque la regla solo acepta los cuatro nombres exactos; queda por confirmar con el negocio si se aceptan esas variantes.
 
 ### Regla 3: `calcular_total(precio, cantidad)`, total de la reserva
@@ -179,3 +181,17 @@ decimales (pesos enteros), como pide la regla.
 
 **Lo que no se agregó:** «Nequí» con tilde. La ambigüedad de la regla 2 sigue abierta; una prueba fijaría
 una regla que el negocio no ha decidido.
+
+## 3. Romper el código a propósito
+
+Cada cambio se hizo solo, en `app/reservas.py`, se ejecutó `python -m pytest -q` y se deshizo con
+`git restore app/reservas.py` antes del siguiente. Ninguno de estos cambios quedó en un commit.
+
+| Cambio introducido | Archivo y línea | ¿Alguna prueba falló? | Qué hice |
+|---|---|---|---|
+| `cantidad <= unidades_libres` por `cantidad < unidades_libres` (no deja pedir las que quedan) | `app/reservas.py:95` | Sí, `test_puede_reservar_casos_de_limite[R4-1]` | Nada: la suite protege ese borde |
+| `>= LIMITE_EFECTIVO` por `> LIMITE_EFECTIVO` (a las 24 h exactas no vencería) | `app/reservas.py:33` | Sí, `test_reserva_vencida[R1-5]` | Nada: la suite protege el borde de las 24 h |
+| `precio * cantidad` por `precio + cantidad` | `app/reservas.py:74` | Sí, `test_calcular_total[R3-1]`, `[R3-2]`, `[R3-4]` y `[R3-5]` | Nada |
+| `precio < PRECIO_MINIMO` por `precio <= PRECIO_MINIMO` (rechazaría la gorra de 40.000) | `app/reservas.py:70` | Sí, `test_calcular_total[R3-2]` | Nada: el borde de 40.000 está cubierto |
+| `texto.strip()` por `texto.strip(" ")` (solo quita espacios, no saltos de línea) | `app/reservas.py:47` | **No**: 54 passed | Agregué R2-13 `"nequi\n"` → `"nequi"`. Con el código roto ahora falla `test_normalizar_forma_pago[R2-13]`; con el código bueno pasa |
+| Cada condición de `puede_reservar` cambiada por `True`, una a la vez (ver sección 2) | `app/reservas.py:93-95` | Sí: sin C1 fallan R4-8 y D5; sin C2, R4-4 y D3; sin C3, R4-7 y D2 | Sirvió para descartar D4, D6, D7 y D8, que no fallaban con ninguno |

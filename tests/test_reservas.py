@@ -64,8 +64,9 @@ def test_reserva_vencida_ahora_anterior_lanza_error(creada_en, ahora):
         ("NEQUI", "nequi"),  # R2-5 partición válida: mayúsculas
         ("Daviplata", "daviplata"),  # R2-6 partición válida: mayúscula inicial
         ("  efectivo ", "efectivo"),  # R2-7 partición válida: espacios a los lados
+        ("nequi\n", "nequi"),  # R2-13 partición válida: salto de línea al final
     ],
-    ids=["R2-1", "R2-2", "R2-3", "R2-4", "R2-5", "R2-6", "R2-7"],
+    ids=["R2-1", "R2-2", "R2-3", "R2-4", "R2-5", "R2-6", "R2-7", "R2-13"],
 )
 def test_normalizar_forma_pago(texto, esperado):
     assert normalizar_forma_pago(texto) == esperado
