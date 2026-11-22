@@ -132,7 +132,7 @@ Si falla cualquiera, no se puede (False). Si `unidades_libres` es negativo, es u
 Simplificación: si C1 es No, C2 y C3 no importan (D5 a D8 = False). Solo D1 da True. Se dejan las 8
 filas en las pruebas porque cada una se escribe en una línea de `parametrize`.
 
-Nota: la cantidad 0 cumple C3 (0 ≤ libres) pero no C2, por eso D3 y R4-4 dan False.
+Nota: la cantidad 0 cumple C3 (0 ≤ libres) pero no C2, por eso R4-4 da False.
 
 **Ambigüedades encontradas:**
 - `"si"` en minúscula o con espacios: se mantiene la comparación exacta con `"SI"`, igual que en `buscar_prenda` (semana 5, entrada 8 de la bitácora). Decisión por confirmar cuando se lea la hoja de Google Sheets.
