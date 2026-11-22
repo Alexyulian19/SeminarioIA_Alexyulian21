@@ -23,14 +23,14 @@ porque una reserva no puede crearse en el futuro.
 
 | # | Técnica | Partición o límite | Entrada (creada_en → ahora) | Esperado | Prueba que lo cubre |
 |---|---|---|---|---|---|
-| R1-1 | Partición válida | No vencida (menos de 24 h) | 21-nov 10:00 → 21-nov 12:00 (2 h) | False | (paso 4) |
-| R1-2 | Partición válida | Vencida (más de 24 h) | 21-nov 10:00 → 22-nov 16:00 (30 h) | True | (paso 4) |
-| R1-3 | Límite | Recién creada (0 s) | 21-nov 10:00 → 21-nov 10:00 | False | (paso 4) |
-| R1-4 | Límite | Último segundo antes de vencer | 21-nov 10:00 → 22-nov 09:59:59 | False | (paso 4) |
-| R1-5 | Límite | 24 h exactas | 21-nov 10:00 → 22-nov 10:00:00 | True | (paso 4) |
-| R1-6 | Límite | Primer segundo después de las 24 h | 21-nov 10:00 → 22-nov 10:00:01 | True | (paso 4) |
-| R1-7 | Partición inválida | `ahora` antes de `creada_en` | 21-nov 10:00 → 21-nov 09:00 | ValueError | (paso 4) |
-| R1-8 | Límite inválido | `ahora` un segundo antes de `creada_en` | 21-nov 10:00 → 21-nov 09:59:59 | ValueError | (paso 4) |
+| R1-1 | Partición válida | No vencida (menos de 24 h) | 21-nov 10:00 → 21-nov 12:00 (2 h) | False | `test_reserva_vencida[R1-1]` |
+| R1-2 | Partición válida | Vencida (más de 24 h) | 21-nov 10:00 → 22-nov 16:00 (30 h) | True | `test_reserva_vencida[R1-2]` |
+| R1-3 | Límite | Recién creada (0 s) | 21-nov 10:00 → 21-nov 10:00 | False | `test_reserva_vencida[R1-3]` |
+| R1-4 | Límite | Último segundo antes de vencer | 21-nov 10:00 → 22-nov 09:59:59 | False | `test_reserva_vencida[R1-4]` |
+| R1-5 | Límite | 24 h exactas | 21-nov 10:00 → 22-nov 10:00:00 | True | `test_reserva_vencida[R1-5]` |
+| R1-6 | Límite | Primer segundo después de las 24 h | 21-nov 10:00 → 22-nov 10:00:01 | True | `test_reserva_vencida[R1-6]` |
+| R1-7 | Partición inválida | `ahora` antes de `creada_en` | 21-nov 10:00 → 21-nov 09:00 | ValueError | `test_reserva_vencida_ahora_anterior_lanza_error[R1-7]` |
+| R1-8 | Límite inválido | `ahora` un segundo antes de `creada_en` | 21-nov 10:00 → 21-nov 09:59:59 | ValueError | `test_reserva_vencida_ahora_anterior_lanza_error[R1-8]` |
 
 **Ambigüedades encontradas:**
 - ¿A las 24 h exactas ya venció? Resuelta: sí («vence a las 24 horas»), caso R1-5.
@@ -48,18 +48,18 @@ cliente cuál de las cuatro quiere.
 
 | # | Técnica | Partición o límite | Entrada | Esperado | Prueba que lo cubre |
 |---|---|---|---|---|---|
-| R2-1 | Partición válida | Efectivo | `"efectivo"` | `"efectivo"` | (paso 4) |
-| R2-2 | Partición válida | Nequi | `"nequi"` | `"nequi"` | (paso 4) |
-| R2-3 | Partición válida | Daviplata | `"daviplata"` | `"daviplata"` | (paso 4) |
-| R2-4 | Partición válida | Nu | `"nu"` | `"nu"` | (paso 4) |
-| R2-5 | Partición válida | Mayúsculas | `"NEQUI"` | `"nequi"` | (paso 4) |
-| R2-6 | Partición válida | Mayúscula inicial | `"Daviplata"` | `"daviplata"` | (paso 4) |
-| R2-7 | Partición válida | Espacios a los lados | `"  efectivo "` | `"efectivo"` | (paso 4) |
-| R2-8 | Partición inválida | Banco no aceptado | `"bancolombia"` | ValueError | (paso 4) |
-| R2-9 | Partición inválida | «Transferencia» sin decir cuál | `"transferencia"` | ValueError | (paso 4) |
-| R2-10 | Partición inválida | Nombre comercial con más palabras | `"Nu Bank"` | ValueError | (paso 4) |
-| R2-11 | Límite (texto vacío) | Vacío | `""` | ValueError | (paso 4) |
-| R2-12 | Límite (texto vacío) | Solo espacios | `"   "` | ValueError | (paso 4) |
+| R2-1 | Partición válida | Efectivo | `"efectivo"` | `"efectivo"` | `test_normalizar_forma_pago[R2-1]` |
+| R2-2 | Partición válida | Nequi | `"nequi"` | `"nequi"` | `test_normalizar_forma_pago[R2-2]` |
+| R2-3 | Partición válida | Daviplata | `"daviplata"` | `"daviplata"` | `test_normalizar_forma_pago[R2-3]` |
+| R2-4 | Partición válida | Nu | `"nu"` | `"nu"` | `test_normalizar_forma_pago[R2-4]` |
+| R2-5 | Partición válida | Mayúsculas | `"NEQUI"` | `"nequi"` | `test_normalizar_forma_pago[R2-5]` |
+| R2-6 | Partición válida | Mayúscula inicial | `"Daviplata"` | `"daviplata"` | `test_normalizar_forma_pago[R2-6]` |
+| R2-7 | Partición válida | Espacios a los lados | `"  efectivo "` | `"efectivo"` | `test_normalizar_forma_pago[R2-7]` |
+| R2-8 | Partición inválida | Banco no aceptado | `"bancolombia"` | ValueError | `test_normalizar_forma_pago_invalida_lanza_error[R2-8]` |
+| R2-9 | Partición inválida | «Transferencia» sin decir cuál | `"transferencia"` | ValueError | `test_normalizar_forma_pago_invalida_lanza_error[R2-9]` |
+| R2-10 | Partición inválida | Nombre comercial con más palabras | `"Nu Bank"` | ValueError | `test_normalizar_forma_pago_invalida_lanza_error[R2-10]` |
+| R2-11 | Límite (texto vacío) | Vacío | `""` | ValueError | `test_normalizar_forma_pago_invalida_lanza_error[R2-11]` |
+| R2-12 | Límite (texto vacío) | Solo espacios | `"   "` | ValueError | `test_normalizar_forma_pago_invalida_lanza_error[R2-12]` |
 
 **Ambigüedades encontradas:**
 - «Transferencia» sola: resuelta como ValueError; el agente pregunta cuál de las tres cuentas quiere.
@@ -77,16 +77,16 @@ cliente cuál de las cuatro quiere.
 
 | # | Técnica | Partición o límite | Entrada (precio, cantidad) | Esperado | Prueba que lo cubre |
 |---|---|---|---|---|---|
-| R3-1 | Partición válida | Precio y cantidad normales | 80.000, 2 | 160.000 | (paso 4) |
-| R3-2 | Límite | Precio mínimo | 40.000, 1 | 40.000 | (paso 4) |
-| R3-3 | Límite | Un peso menos que el mínimo | 39.999, 1 | ValueError | (paso 4) |
-| R3-4 | Límite | Cantidad mínima | 150.000, 1 | 150.000 | (paso 4) |
-| R3-5 | Límite | Cantidad máxima | 150.000, 5 | 750.000 | (paso 4) |
-| R3-6 | Límite | Una más que el máximo | 150.000, 6 | ValueError | (paso 4) |
-| R3-7 | Límite | Cantidad cero | 150.000, 0 | ValueError | (paso 4) |
-| R3-8 | Partición inválida | Cantidad negativa | 150.000, −1 | ValueError | (paso 4) |
-| R3-9 | Partición inválida | Consultar precio | None, 1 | ValueError | (paso 4) |
-| R3-10 | Partición inválida | Precio 0 | 0, 1 | ValueError | (paso 4) |
+| R3-1 | Partición válida | Precio y cantidad normales | 80.000, 2 | 160.000 | `test_calcular_total[R3-1]` |
+| R3-2 | Límite | Precio mínimo | 40.000, 1 | 40.000 | `test_calcular_total[R3-2]` |
+| R3-3 | Límite | Un peso menos que el mínimo | 39.999, 1 | ValueError | `test_calcular_total_invalido_lanza_error[R3-3]` |
+| R3-4 | Límite | Cantidad mínima | 150.000, 1 | 150.000 | `test_calcular_total[R3-4]` |
+| R3-5 | Límite | Cantidad máxima | 150.000, 5 | 750.000 | `test_calcular_total[R3-5]` |
+| R3-6 | Límite | Una más que el máximo | 150.000, 6 | ValueError | `test_calcular_total_invalido_lanza_error[R3-6]` |
+| R3-7 | Límite | Cantidad cero | 150.000, 0 | ValueError | `test_calcular_total_invalido_lanza_error[R3-7]` |
+| R3-8 | Partición inválida | Cantidad negativa | 150.000, −1 | ValueError | `test_calcular_total_invalido_lanza_error[R3-8]` |
+| R3-9 | Partición inválida | Consultar precio | None, 1 | ValueError | `test_calcular_total_invalido_lanza_error[R3-9]` |
+| R3-10 | Partición inválida | Precio 0 | 0, 1 | ValueError | `test_calcular_total_invalido_lanza_error[R3-10]` |
 
 **Ambigüedades encontradas:**
 - Máximo de unidades: dije «lo normal es 4 o 5». Se tomó **5** como máximo; queda por confirmar si en algún caso se permite más.
@@ -106,34 +106,76 @@ Si falla cualquiera, no se puede (False). Si `unidades_libres` es negativo, es u
 
 | # | Técnica | Partición o límite | Entrada (disponible, libres, cantidad) | Esperado | Prueba que lo cubre |
 |---|---|---|---|---|---|
-| R4-1 | Límite | Pide exactamente las que quedan | "SI", 3, 3 | True | (paso 4) |
-| R4-2 | Límite | Pide una más de las que quedan | "SI", 3, 4 | False | (paso 4) |
-| R4-3 | Límite | Cantidad mínima | "SI", 3, 1 | True | (paso 4) |
-| R4-4 | Límite | Cantidad cero | "SI", 3, 0 | False | (paso 4) |
-| R4-5 | Límite | Cantidad máxima con stock | "SI", 8, 5 | True | (paso 4) |
-| R4-6 | Límite | Una más que el máximo con stock | "SI", 8, 6 | False | (paso 4) |
-| R4-7 | Límite | Agotada (0 libres) | "SI", 0, 1 | False | (paso 4) |
-| R4-8 | Partición inválida | Disponible en minúscula | "si", 3, 1 | False | (paso 4) |
-| R4-9 | Partición inválida | Libres negativo | "SI", −1, 1 | ValueError | (paso 4) |
+| R4-1 | Límite | Pide exactamente las que quedan | "SI", 3, 3 | True | `test_puede_reservar_casos_de_limite[R4-1]` |
+| R4-2 | Límite | Pide una más de las que quedan | "SI", 3, 4 | False | D2 (fila fusionada, ver sección 2) |
+| R4-3 | Límite | Cantidad mínima | "SI", 3, 1 | True | `test_puede_reservar_casos_de_limite[R4-3]` |
+| R4-4 | Límite | Cantidad cero | "SI", 3, 0 | False | `test_puede_reservar_casos_de_limite[R4-4]` |
+| R4-5 | Límite | Cantidad máxima con stock | "SI", 8, 5 | True | `test_puede_reservar_casos_de_limite[R4-5]` |
+| R4-6 | Límite | Una más que el máximo con stock | "SI", 8, 6 | False | D3 (fila fusionada, ver sección 2) |
+| R4-7 | Límite | Agotada (0 libres) | "SI", 0, 1 | False | `test_puede_reservar_casos_de_limite[R4-7]` |
+| R4-8 | Partición inválida | Disponible en minúscula | "si", 3, 1 | False | `test_puede_reservar_casos_de_limite[R4-8]` |
+| R4-9 | Partición inválida | Libres negativo | "SI", −1, 1 | ValueError | `test_puede_reservar_libres_negativo_lanza_error` |
 
 **Tabla de decisión** (C1: disponible es "SI"; C2: cantidad entre 1 y 5; C3: cantidad ≤ libres):
 
-| # | C1 disponible | C2 cantidad 1–5 | C3 cantidad ≤ libres | Entrada | Esperado |
-|---|---|---|---|---|---|
-| D1 | Sí | Sí | Sí | "SI", 3, 2 | True |
-| D2 | Sí | Sí | No | "SI", 1, 2 | False |
-| D3 | Sí | No | Sí | "SI", 10, 6 | False |
-| D4 | Sí | No | No | "SI", 3, 6 | False |
-| D5 | No | Sí | Sí | "NO", 3, 2 | False |
-| D6 | No | Sí | No | "NO", 1, 2 | False |
-| D7 | No | No | Sí | "NO", 10, 6 | False |
-| D8 | No | No | No | "NO", 3, 6 | False |
+| # | C1 disponible | C2 cantidad 1–5 | C3 cantidad ≤ libres | Entrada | Esperado | Prueba que lo cubre |
+|---|---|---|---|---|---|---|
+| D1 | Sí | Sí | Sí | "SI", 3, 2 | True | `test_puede_reservar_tabla_de_decision[D1]` |
+| D2 | Sí | Sí | No | "SI", 3, 4 | False | `test_puede_reservar_tabla_de_decision[D2]` |
+| D3 | Sí | No | Sí | "SI", 8, 6 | False | `test_puede_reservar_tabla_de_decision[D3]` |
+| D4 | Sí | No | No | "SI", 3, 6 | False | Descartada: redundante (sección 2) |
+| D5 | No | Sí | Sí | "NO", 3, 2 | False | `test_puede_reservar_tabla_de_decision[D5]` |
+| D6 | No | Sí | No | "NO", 1, 2 | False | Descartada: redundante (sección 2) |
+| D7 | No | No | Sí | "NO", 10, 6 | False | Descartada: redundante (sección 2) |
+| D8 | No | No | No | "NO", 3, 6 | False | Descartada: redundante (sección 2) |
 
-Simplificación: si C1 es No, C2 y C3 no importan (D5 a D8 = False). Solo D1 da True. Se dejan las 8
-filas en las pruebas porque cada una se escribe en una línea de `parametrize`.
+Simplificación: si C1 es No, C2 y C3 no importan (D5 a D8 = False). Solo D1 da True. Como las tres
+condiciones van unidas con «y», en las pruebas quedan D1 (todo se cumple) y una fila por cada condición
+que falla sola: D2, D3 y D5. D2 y D3 usan los valores de borde (una más que las libres y una más que el
+máximo). Por qué se descartaron D4, D6, D7 y D8: sección 2.
 
 Nota: la cantidad 0 cumple C3 (0 ≤ libres) pero no C2, por eso R4-4 da False.
 
 **Ambigüedades encontradas:**
 - `"si"` en minúscula o con espacios: se mantiene la comparación exacta con `"SI"`, igual que en `buscar_prenda` (semana 5, entrada 8 de la bitácora). Decisión por confirmar cuando se lea la hoja de Google Sheets.
 - ¿Cantidad mayor que 5 es error o solo «no se puede»? Aquí da False (el agente responde «máximo 5 por reserva»); en `calcular_total` es ValueError porque ese total nunca debería pedirse.
+
+## 2. Pruebas de la IA descartadas o corregidas
+
+**Prompt usado:** prompt 2 de la clase (rol: desarrollador que escribe pruebas con pytest; contexto:
+`app/reservas.py` y este registro; tarea: una fila de `parametrize` por caso de las tablas y
+`pytest.raises(ValueError)` para los errores; restricciones: no tocar `app/`, esperados fijos de la
+regla, tipo de error exacto). Ver la entrada 13 de [bitacora_ia.md](bitacora_ia.md).
+
+La salida de la IA está tal cual en el commit «Pruebas: test_reservas.py tal como lo generó la IA
+(sin revisar)»: 47 pruebas, todas en verde, pero con 3 líneas que ruff marca como largas. La revisión
+está en el commit siguiente: quedan 41 pruebas. Cada prueba se revisó con las tres preguntas:
+¿el esperado sale de la regla?, ¿fallaría si rompo el código?, ¿cubre algo que otra no cubre?
+
+Para la pregunta 2 en `puede_reservar` rompí cada condición por separado (la cambié por `True`) y
+anoté qué filas fallaban:
+- sin C1 (disponible): fallan R4-8 y D5;
+- sin C2 (cantidad 1 a 5): fallan R4-4, R4-6 y D3;
+- sin C3 (cantidad ≤ libres): fallan R4-2, R4-7 y D2.
+
+D4, D6, D7 y D8 no fallaron con ninguno de los tres cambios.
+
+| Prueba generada | Decisión | Por qué | En su lugar |
+|---|---|---|---|
+| Todas las de `parametrize` (ids automáticos como `[creada_en0-ahora0-False]`) | Corregida | Esperados correctos, pero con esos nombres no se puede saber qué fila de la tabla cubre cada prueba ni llenar la columna «Prueba que lo cubre» | `ids=["R1-1", ...]` con el código de la tabla; `pytest -v` ahora muestra `test_reserva_vencida[R1-5]` |
+| Docstring del módulo y comentarios de R1-4 y R1-6 | Corregida | `ruff check` falla (E501, líneas de más de 88 caracteres) | Docstring en varias líneas y comentarios más cortos |
+| Tabla de decisión D4 `("SI", 3, 6)` | Descartada | Pregunta 2: no falló al romper ninguna condición sola, porque siempre hay otra condición en No que da False. Pregunta 3: no cubre nada que D2 y D3 no cubran | Nada; la fila sigue en la tabla de decisión como «simplificada» |
+| Tabla de decisión D6, D7 y D8 (`"NO"` con otras condiciones en No) | Descartada | Misma razón: con C1 en No el resultado es False sin importar C2 y C3 (la simplificación de la tabla). Solo D5 detecta que se quite C1 | D5 `("NO", 3, 2)` representa las filas con C1 en No |
+| Límite R4-2 `("SI", 3, 4)` y tabla D2 `("SI", 1, 2)` | Corregida (fusionadas) | Las dos prueban la misma combinación (solo falla C3). Sobraba una, y la de la tabla no estaba en el borde | D2 usa la entrada del borde `("SI", 3, 4)` y se quitó R4-2 de la prueba de límites |
+| Límite R4-6 `("SI", 8, 6)` y tabla D3 `("SI", 10, 6)` | Corregida (fusionadas) | Misma combinación (solo falla C2, por 6 unidades). Redundantes | D3 usa `("SI", 8, 6)` y se quitó R4-6 de la prueba de límites |
+| Tabla D1 `("SI", 3, 2)` | Conservada | El mismo resultado que R4-1, R4-3 y R4-5, pero es la única fila «todo se cumple» de la tabla de decisión | — |
+| Las 8 de `reserva_vencida` | Conservadas | Esperados de la regla (vence a las 24 h exactas: R1-5 es True). R1-4/R1-5 detectan si `>=` cambia a `>` o el límite cambia | — |
+| Las 12 de `normalizar_forma_pago` | Conservadas | Una por partición; R2-5 y R2-7 detectan si se quita `.lower()` o `.strip()` | — |
+| Las 10 de `calcular_total` | Conservadas | Esperados fijos (160.000, 40.000, 750.000), no `precio * cantidad`; los dos bordes de precio y de cantidad | — |
+
+**Lo que la IA hizo bien:** usó `is True`/`is False` en lugar de `assert resultado`, `pytest.raises(ValueError)`
+con el tipo exacto, esperados escritos como números y no tocó `app/`. No usó `pytest.approx` porque no hay
+decimales (pesos enteros), como pide la regla.
+
+**Lo que no se agregó:** «Nequí» con tilde. La ambigüedad de la regla 2 sigue abierta; una prueba fijaría
+una regla que el negocio no ha decidido.
