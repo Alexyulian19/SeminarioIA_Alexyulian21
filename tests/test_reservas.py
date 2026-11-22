@@ -81,8 +81,9 @@ def test_normalizar_forma_pago(texto, esperado):
         "Nu Bank",  # R2-10 partición inválida: nombre con más palabras
         "",  # R2-11 límite texto vacío: vacío
         "   ",  # R2-12 límite texto vacío: solo espacios
+        "Nequí",  # R2-14 partición inválida: con tilde (decisión de Alex)
     ],
-    ids=["R2-8", "R2-9", "R2-10", "R2-11", "R2-12"],
+    ids=["R2-8", "R2-9", "R2-10", "R2-11", "R2-12", "R2-14"],
 )
 def test_normalizar_forma_pago_invalida_lanza_error(texto):
     with pytest.raises(ValueError):

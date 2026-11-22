@@ -60,12 +60,13 @@ cliente cuál de las cuatro quiere.
 | R2-10 | Partición inválida | Nombre comercial con más palabras | `"Nu Bank"` | ValueError | `test_normalizar_forma_pago_invalida_lanza_error[R2-10]` |
 | R2-11 | Límite (texto vacío) | Vacío | `""` | ValueError | `test_normalizar_forma_pago_invalida_lanza_error[R2-11]` |
 | R2-12 | Límite (texto vacío) | Solo espacios | `"   "` | ValueError | `test_normalizar_forma_pago_invalida_lanza_error[R2-12]` |
+| R2-14 | Partición inválida | Con tilde (decisión del 22-nov) | `"Nequí"` | ValueError | `test_normalizar_forma_pago_invalida_lanza_error[R2-14]` |
 | R2-13 | Partición válida (agregada al romper el código) | Salto de línea al final, como cuando el cliente pulsa Enter | `"nequi\n"` | `"nequi"` | `test_normalizar_forma_pago[R2-13]` |
 
 **Ambigüedades encontradas:**
 - «Transferencia» sola: resuelta como ValueError; el agente pregunta cuál de las tres cuentas quiere.
 - ¿Un salto de línea o una tabulación cuentan como «espacio»? Resuelta: sí, porque en WhatsApp el texto puede llegar con un salto de línea al final. Salió al romper el código (sección 3), caso R2-13.
-- «Nu Bank» y «Nequí» (con tilde): **abiertas**. Por ahora son ValueError porque la regla solo acepta los cuatro nombres exactos; queda por confirmar con el negocio si se aceptan esas variantes.
+- «Nu Bank» y «Nequí» (con tilde): **decidido, no se aceptan**. La cuenta se llama Nequi, sin tilde; si el cliente escribe «Nequí» o «Nu Bank», el agente le pide escribir Nequi, Daviplata, Nu o efectivo. Caso R2-14.
 
 ### Regla 3: `calcular_total(precio, cantidad)`, total de la reserva
 
@@ -91,7 +92,7 @@ cliente cuál de las cuatro quiere.
 | R3-10 | Partición inválida | Precio 0 | 0, 1 | ValueError | `test_calcular_total_invalido_lanza_error[R3-10]` |
 
 **Ambigüedades encontradas:**
-- Máximo de unidades: dije «lo normal es 4 o 5». Se tomó **5** como máximo; queda por confirmar si en algún caso se permite más.
+- Máximo de unidades: dije «lo normal es 4 o 5». Se tomó **5** como máximo; confirmado: máximo 5, porque no se tiene tanta mercancía de una misma prenda.
 - Precio 0: en `buscar_prenda` es «Consultar precio». Aquí da ValueError por ser menor que 40.000, que es el mismo resultado: sin precio no hay total.
 - No hay decimales: los precios son pesos enteros, así que `pytest.approx` no aplica.
 
