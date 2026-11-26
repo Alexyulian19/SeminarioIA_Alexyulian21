@@ -62,3 +62,16 @@ forma de pago es efectivo y `None` si es transferencia (la verifica el equipo). 
 | A-14 | **Aviso al vencer.** Dado que una reserva en efectivo venció, cuando el sistema la cancela, entonces le avisa al cliente con el mensaje de cancelación. | Le Falta un Dato | sin prueba |
 | A-15 | **Respuesta clara.** Dado que un cliente reserva por WhatsApp, cuando recibe la confirmación, entonces entiende fácilmente qué tiene que hacer para pagar. | No es Observable | sin prueba |
 | A-16 | **Reserva sin nombre.** Dado que th-01 talla 41 tiene 3 unidades libres, cuando un cliente intenta reservar 1 sin escribir su nombre, entonces el sistema la rechaza y pide el nombre. | Se automatiza | test_a16_reserva_sin_nombre |
+
+## Registro de la revisión (Alex, 26-nov-2026)
+
+| Escenario o prueba | Qué propuso la IA | Qué estaba mal | Qué hice |
+|---|---|---|---|
+| A-02, A-03, A-04, A-07 | (mi primera clasificación) | Los marqué «le falta un dato», pero el «entonces» sí trae el dato exacto | Los cambié a «se automatiza» |
+| A-09 | Usar la gorra (precio 0, 5 unidades) y ponerle precio dentro de la prueba | La prueba cambiaba el catálogo y el rechazo podía venir por falta de unidades, no por el máximo de 5 | Agregué `ca-01` (8 unidades, $70.000) y comprobé «quedan 8 libres» |
+| A-07, A-11, A-12 | Solo comprobar que hubo rechazo | No revisaban el motivo; un rechazo por otra razón pasaba igual | Agregué `as error` y un `assert` sobre el motivo |
+| A-12 (hallazgo) | Mensaje único para 3 motivos | Al cliente le llega «quedan 0 libres» y nunca que la prenda no está disponible | Lo dejé anotado; la prueba describe el comportamiento actual |
+| Línea 57 de `reservar.py` | Sin escenario | La regla «falta el nombre del cliente» no tenía prueba (cobertura 98 %) | Escribí A-16 y su prueba; cobertura 100 % |
+| Romper el código | — | Con las pruebas de la IA, cambiar el texto «libres» no hacía fallar nada | Con mi revisión fallan A-07 y A-12; A-09 también después de corregirla |
+| D-01 | Borrador del reporte | Decía Python 3.11, «también en Linux» y 13 pruebas | Lo reproduje: Python 3.13.15, solo Windows, 12 pruebas |
+| A-16 en los criterios | — | El nombre de la prueba no tenía comillas invertidas | Lo arreglé |
