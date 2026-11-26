@@ -168,6 +168,37 @@ Con el esqueleto, las 10 pruebas fallaron con `NotImplementedError`, lo que conf
 
 En la semana 7 rompí el código a propósito: las pruebas atraparon 4 de los 5 cambios. El quinto (`strip(" ")`, que deja los saltos de línea) no lo atrapó ninguna, y por eso se agregó el caso R2-13.
 
+### Entrada 17
+
+- **Fecha:** 2026-11-26
+- **Prompt o sugerencia:** Le pedí a Claude convertir los criterios de HU-01 y HU-05 (reserva) en escenarios de aceptación (A-01 a A-15) y en pruebas automáticas (`tests/test_aceptacion.py`).
+- **Decisión:** Aceptada con cambios
+- **Por qué:** Al revisar cada prueba contra su escenario encontré que A-09 usaba la gorra (precio 0 y 5 unidades) y le ponía precio dentro de la prueba, así que el rechazo podía venir por falta de unidades y no por el máximo de 5. Además A-07, A-11 y A-12 solo comprobaban que hubo rechazo, sin revisar el motivo. Agregué al catálogo de prueba `ca-01` (8 unidades, $70.000), corregí A-09 y agregué un `assert` sobre el motivo en A-07, A-09, A-11 y A-12. También corregí mi propia clasificación: A-02, A-03, A-04 y A-07 sí se automatizan.
+- **Verificación:** Clasifiqué los 15 escenarios (13 se automatizan, A-14 «le falta un dato», A-15 «no es observable»). Corrí `pytest -v` después de cada cambio: 72 pruebas pasan.
+- **Commit relacionado:** `1b0a8a5`, `0f4d75e` y `ca79942`
+
+### Entrada 18
+
+- **Fecha:** 2026-11-26
+- **Prompt o sugerencia:** Le pedí a Claude la función `crear_reserva` en `app/reservar.py`, que une `buscar_prenda` con mis 4 reglas de reservas, y la medición de cobertura con `pytest-cov`.
+- **Decisión:** Aceptada con cambios (en las pruebas, no en el código)
+- **Por qué:** La cobertura daba 98 %: la línea 57 («Falta el nombre del cliente») no tenía ningún escenario. Escribí A-16 (reserva sin nombre) y su prueba, y la cobertura quedó en 100 %. Al romper el código a propósito: cambiar `==` por `!=` en la forma de pago hizo fallar A-05, A-06 y A-13. Cambiar el texto «libres» del mensaje no hacía fallar ninguna prueba de la IA; con mi revisión fallan A-07, A-09 y A-12. También vi que el código usa un solo mensaje para tres motivos: al cliente de una prenda marcada «NO» le llega «quedan 0 libres» y nunca que no está disponible. Lo dejé anotado en el registro de la revisión.
+- **Verificación:** `pytest --cov`: 72 passed, TOTAL 100 %. Deshice cada cambio con `git checkout app/reservar.py` y volví a correr las pruebas.
+- **Commit relacionado:** `fdae80c` y `ca79942`
+
+### Entrada 19
+
+- **Fecha:** 2026-11-26
+- **Prompt o sugerencia:** Le pedí a Claude redactar el reporte D-01 (precio vacío) a partir de los commits `ff05753` y `ea6db49` y de la entrada 7.
+- **Decisión:** Aceptada con cambios
+- **Por qué:** El borrador tenía datos que nadie comprobó: decía Python 3.11 (yo uso 3.13.15), «también se reproduce con Python 3.13 en Linux» (nadie lo probó) y «las 13 pruebas pasaban» (en `ff05753` eran 12, porque `test_precio_vacio_devuelve_none` se agregó después). No puse nombre de compañero porque trabajo solo en el taller.
+- **Verificación:** Cloné el repo en una carpeta aparte, hice `git checkout ff05753`, corrí el comando del reporte y salió `'precio': ''`. Corrí `pytest tests/test_buscar_prenda.py` en esa copia: 12 passed.
+- **Commit relacionado:** `8d8906d` y `ff5a65e`
+
+## Reflexión semana 8
+
+Esta bitácora me dejo ver algo muy valioso: que es el saber usar la IA como un apoyo y no como un reemplazo del  criterio. En lugar de quedarse uno con lo primero que te entregó, toca tomarse el trabajo de revisar a fondo y con seguridad, romper el código para ver si las pruebas de verdad servían y confirmar los datos en el historial de Git para no dejar mentiras en el reporte. Al final, la herramienta te ayudó a avanzar más rápido, pero lo que realmente le dio calidad y respaldo al proyecto fue el ojo crítico y el rigor al comprobar cada detalle.
+
 ## Reflexión final (5 a 8 líneas)
 
 El asistente me ayudó más a convertir el contrato en pruebas concretas y a escribir la implementación rápido, en un solo intento.
