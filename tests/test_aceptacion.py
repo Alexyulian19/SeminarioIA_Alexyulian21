@@ -28,6 +28,8 @@ def catalogo() -> list[dict]:
          "precio": 0, "disponible": "SI", "cantidad": 5},
         {"codigo": "bu-01", "nombre": "Buso negro cuello redondo", "talla": "M",
          "precio": 85000, "disponible": "NO", "cantidad": 4},
+                {"codigo": "ca-01", "nombre": "Camiseta negra básica", "talla": "M",
+         "precio": 70000, "disponible": "SI", "cantidad": 8},
     ]
 
 
@@ -133,18 +135,17 @@ def test_a08_pide_justo_las_que_quedan(catalogo):
     respuesta = buscar_prenda(catalogo, reservas, "je-01", "32")
     assert respuesta["unidades_libres"] == 0
     assert respuesta["hay"] is False
-
+    
 
 def test_a09_mas_de_cinco_unidades(catalogo):
-    # Dado: go-01 con 5 unidades (se le pone precio para que solo falle la cantidad)
-    catalogo[2]["precio"] = 45000
+    # Dado: ca-01 talla M con 8 unidades libres a $70.000
     # Cuando: un cliente intenta reservar 6
-    # Entonces: el sistema la rechaza
-    with pytest.raises(ReservaRechazada):
+    # Entonces: el sistema la rechaza por pasar el máximo de 5
+    with pytest.raises(ReservaRechazada) as error:
         crear_reserva(
-            catalogo, [], "go-01", "UNICA", 6, "efectivo", "Camilo Ramos", AHORA
+            catalogo, [], "ca-01", "M", 6, "efectivo", "Camilo Ramos", AHORA
         )
-
+    assert "5" in str(error.value)
 
 def test_a10_transferencia_sin_decir_cual(catalogo):
     # Dado: th-01 en 41 con unidades
@@ -189,3 +190,4 @@ def test_a13_reserva_vence_a_las_24_horas(catalogo):
     # Entonces: la reserva está vencida
     assert reserva_vencida(reserva["creada_en"], ahora) is True
     assert reserva["vence_en"] == ahora
+
