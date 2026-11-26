@@ -1,0 +1,75 @@
+erDiagram
+  DATO_PAGO {
+    text entidad PK "Nequi, Daviplata o Nu, en Google Sheets"
+    text tipo "numero o llave"
+    text valor "numero de cuenta o llave"
+    text titular
+    text qr "enlace a la imagen, opcional"
+  }
+  CONVERSACION ||--o{ MENSAJE : "tiene"
+  CONVERSACION ||--o{ RESERVA : "origina"
+  CONVERSACION ||--o{ PASO_AL_EQUIPO : "registra"
+  RESERVA ||--|{ LINEA_RESERVA : "contiene"
+  PRENDA ||--o{ LINEA_RESERVA : "se reserva en"
+  DATO_PAGO |o--o{ RESERVA : "recibe el pago de"
+
+  PRENDA {
+    text codigo PK "th-07, en Google Sheets"
+    text color PK
+    text talla PK
+    text categoria
+    text nombre
+    text marca
+    text calidad "AAA, 1.1 o marca"
+    int precio "mayor que 0"
+    int precio_antes "opcional, promocion"
+    int disponible "unidades en la tienda"
+    text foto "opcional"
+  }
+  CONVERSACION {
+    bigint id PK
+    text telefono_cliente UK "numero de WhatsApp"
+    text atiende "asistente o equipo"
+    timestamptz autorizacion_datos_en "Ley 1581"
+    timestamptz ultimo_mensaje_en
+  }
+  MENSAJE {
+    bigint id PK
+    bigint conversacion_id FK
+    text wa_message_id UK "evita duplicados del webhook"
+    text autor "cliente, asistente o equipo"
+    text texto
+    timestamptz enviado_en
+  }
+  RESERVA {
+    bigint id PK
+    bigint conversacion_id FK
+    text nombre_cliente
+    text telefono "sale de WhatsApp"
+    text forma_pago "efectivo o transferencia"
+    text estado "reservada, pago_por_verificar, pagada, entregada, vencida o cancelada"
+    int total
+    timestamptz creada_en
+    timestamptz vence_en "creada_en + 24 h"
+    text comprobante_media_id "opcional, imagen en WhatsApp"
+    text entidad_pago FK "opcional, cuenta que recibio la transferencia"
+    timestamptz pagada_en "opcional"
+    timestamptz cerrada_en "opcional"
+  }
+  LINEA_RESERVA {
+    bigint id PK
+    bigint reserva_id FK
+    text codigo FK "referencia logica a PRENDA"
+    text color FK
+    text talla FK
+    int cantidad "mayor que 0"
+    int precio_unitario "precio del momento"
+  }
+  PASO_AL_EQUIPO {
+    bigint id PK
+    bigint conversacion_id FK
+    text motivo "queja, descuento o persona"
+    text mensaje_cliente
+    timestamptz creado_en
+    timestamptz atendido_en "opcional"
+  }

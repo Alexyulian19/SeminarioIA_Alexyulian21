@@ -1,0 +1,27 @@
+C4Context
+  title Nivel 1 · Contexto: Catálogo y agente de WhatsApp de Urban
+
+  Person(cliente, "Cliente", "Ve el catálogo, pregunta por prendas, tallas y precios, reserva y paga en efectivo en la tienda o por transferencia")
+  Person(equipo, "Equipo del almacén", "El dueño y Alex. Actualizan el catálogo, las existencias y los datos de pago, verifican transferencias y responden cualquier chat cuando quieren o cuando el asistente se los pasa")
+  System_Ext(wa, "WhatsApp Business Platform", "Meta. Un solo número para el asistente y para la app del equipo")
+  System(sistema, "Catálogo y agente de WhatsApp de Urban", "Muestra el catálogo y responde solo lo que está en la hoja: qué hay, tallas y precios. Reserva unidades por 24 horas sin reservar dos veces la misma, envía los datos de pago y pasa al equipo lo que no debe decidir")
+  System_Ext(ia, "API de Claude", "Anthropic. Modelo de lenguaje que interpreta el mensaje y redacta la respuesta")
+
+  Rel(cliente, sistema, "Ve prendas, precios y tallas y arma su reserva", "Navegador, HTTPS")
+  Rel(cliente, wa, "Pregunta, reserva y envía el comprobante", "App de WhatsApp")
+  Rel(wa, cliente, "Entrega las respuestas", "App de WhatsApp")
+  Rel(equipo, wa, "Responde, confirma pagos y entregas en el mismo chat", "App WhatsApp Business")
+  Rel(equipo, sistema, "Edita catálogo y datos de pago", "Google Sheets")
+  Rel(wa, sistema, "Entrega los mensajes del cliente y del equipo", "Webhook HTTPS")
+  Rel(sistema, wa, "Responde, envía datos de pago y QR, avisa vencimientos y al equipo", "Enlace wa.me, Graph API")
+  Rel(sistema, ia, "Pide interpretar el mensaje y redactar la respuesta", "HTTPS, JSON")
+
+  UpdateRelStyle(cliente, wa, $offsetX="-240", $offsetY="-13")
+  UpdateRelStyle(wa, cliente, $offsetX="5", $offsetY="-38")
+  UpdateRelStyle(cliente, sistema, $offsetX="-145", $offsetY="34")
+  UpdateRelStyle(equipo, wa, $offsetX="22", $offsetY="-9")
+  UpdateRelStyle(equipo, sistema, $offsetX="19", $offsetY="11")
+  UpdateRelStyle(wa, sistema, $offsetX="-205", $offsetY="76")
+  UpdateRelStyle(sistema, wa, $offsetX="-230", $offsetY="121")
+  UpdateRelStyle(sistema, ia, $offsetX="26", $offsetY="45")
+  UpdateLayoutConfig($c4ShapeInRow="2", $c4BoundaryInRow="1")

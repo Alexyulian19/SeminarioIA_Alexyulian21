@@ -1,0 +1,79 @@
+sequenceDiagram
+  title Secuencia · Cliente reserva una prenda por WhatsApp y paga en efectivo o por transferencia (HU-01, HU-05, HU-06 y HU-11)
+  autonumber
+  actor C as Cliente
+  participant W as WhatsApp Cloud API
+  participant S as Servicio del agente (FastAPI)
+  participant IA as API de Claude
+  participant H as Lista del catálogo (Google Sheets)
+  participant DB as Base de datos (Supabase PostgreSQL)
+  actor E as Equipo (dueño o Alex)
+
+  C->>W: Envía 1. [th-07] Adidas Superstar, Color Blanco, Talla 41, Cantidad 1 (desde el catálogo web)
+  W->>S: POST /webhook con el mensaje (HTTPS, JSON)
+  S-->>W: 200 OK
+  S->>IA: Conversación y herramientas (HTTPS, tool use)
+  IA-->>S: Pide buscar_prenda(th-07, Blanco, 41)
+  S->>H: Lee la fila th-07, Blanco, 41 (API de Sheets)
+  H-->>S: Disponible 2, precio 150.000
+  S->>DB: Suma las unidades con reserva activa de th-07, Blanco, 41
+  DB-->>S: 1 reservada, queda 1 libre
+  S->>W: Sí hay 1 en talla 41 a 150.000. ¿A nombre de quién y cómo pagas, efectivo o transferencia?
+  W->>C: Entrega la respuesta
+
+  C->>W: Carlos Ramírez, pago en efectivo
+  W->>S: POST /webhook con el mensaje (HTTPS, JSON)
+  S-->>W: 200 OK
+  S->>IA: Conversación y herramientas
+  IA-->>S: Pide crear_reserva(th-07, Blanco, 41, 1, nombre, efectivo)
+  S->>S: Valida los 7 campos. El teléfono sale de WhatsApp. Ignora cualquier precio escrito por el cliente
+  S->>H: Vuelve a leer disponible y precio
+  H-->>S: Disponible 2, precio 150.000
+
+  alt Queda al menos 1 unidad libre
+    S->>DB: Una transacción: bloquea th-07 Blanco 41, cuenta las reservas activas, inserta la reserva con vence_en = ahora + 24 h
+    DB-->>S: Reserva 15 creada, estado reservada
+    S->>W: Aviso al equipo: reserva 15, th-07 blanco 41, Carlos Ramírez, efectivo
+    W->>E: Entrega el aviso
+    S->>W: Tu reserva 15 queda guardada 24 horas. Págala en la tienda, Cra. 7 n.º 9-2
+    W->>C: Entrega la respuesta
+  else Otro cliente reservó la última unidad un instante antes
+    S->>DB: Misma transacción: bloquea, cuenta y encuentra 0 libres
+    DB-->>S: Sin unidades libres. No se inserta nada
+    Note over S,DB: El bloqueo por prenda, color y talla impide reservar dos veces la misma unidad.
+    S->>W: Se acaba de reservar la última talla 41. ¿Te muestro otra talla o te paso con el almacén?
+    W->>C: Entrega la respuesta
+  else Falla la base de datos
+    S->>DB: Transacción de la reserva
+    DB-->>S: Error. La transacción se deshace completa
+    S->>W: No pude guardar tu reserva. Inténtalo en unos minutos
+    W->>C: Entrega la respuesta
+  end
+
+  opt El cliente elige transferencia
+    S->>IA: Resultado de crear_reserva: reserva 15, forma de pago transferencia
+    IA-->>S: Pide enviar_datos_pago(reserva 15)
+    S->>H: Lee la pestaña de datos de pago
+    H-->>S: Llaves de Nequi, Daviplata y Nu e imagen del QR
+    S->>W: Envía el QR y las llaves con el valor 150.000 (Graph API, imagen y texto)
+    W->>C: Entrega los datos de pago
+    C->>W: Envía la foto del comprobante
+    W->>S: POST /webhook con la imagen
+    S->>DB: Guarda el comprobante y pasa la reserva a pago por verificar
+    Note over S,DB: Con el comprobante recibido la reserva ya no vence sola. La decide el equipo.
+    S->>W: Reenvía el comprobante al equipo
+    W->>E: Comprobante de la reserva 15 para revisar en la cuenta
+    E->>W: Pago de la reserva 15 verificado (app WhatsApp Business)
+    W->>S: POST /webhook con copia del mensaje del equipo
+    S->>DB: Marca la reserva 15 como pagada
+  end
+
+  opt Pasan 24 horas sin pago ni comprobante
+    S->>DB: Tarea cada 5 minutos: busca reservas activas con vence_en vencido
+    DB-->>S: Reserva 15
+    S->>DB: Marca la reserva 15 como vencida. Su unidad vuelve a quedar libre
+    S->>W: Plantilla aprobada: tu reserva 15 venció y se canceló (Graph API)
+    W->>C: Entrega el aviso de cancelación
+    S->>W: Aviso al equipo de la reserva vencida
+    W->>E: Entrega el aviso
+  end
