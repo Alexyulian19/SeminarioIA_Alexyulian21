@@ -115,11 +115,12 @@ def test_a07_pide_mas_de_las_libres(catalogo):
     # Dado: je-01 talla 32 con 1 unidad libre
     reservas = [_reserva("je-01", "32", 1)]
     # Cuando: un cliente intenta reservar 2
-    with pytest.raises(ReservaRechazada):
+    with pytest.raises(ReservaRechazada) as error:
         crear_reserva(
             catalogo, reservas, "je-01", "32", 2, "efectivo", "Sofía Losada", AHORA
         )
-    # Entonces: sigue quedando 1 libre
+    # Entonces: la rechaza y sigue quedando 1 libre
+    assert "quedan 1 libres" in str(error.value)
     assert buscar_prenda(catalogo, reservas, "je-01", "32")["unidades_libres"] == 1
 
 
@@ -145,7 +146,7 @@ def test_a09_mas_de_cinco_unidades(catalogo):
         crear_reserva(
             catalogo, [], "ca-01", "M", 6, "efectivo", "Camilo Ramos", AHORA
         )
-    assert "5" in str(error.value)
+        assert "quedan 8 libres" in str(error.value)
 
 def test_a10_transferencia_sin_decir_cual(catalogo):
     # Dado: th-01 en 41 con unidades
@@ -174,10 +175,12 @@ def test_a12_prenda_no_disponible(catalogo):
     # Dado: bu-01 talla M marcada «NO»
     # Cuando: un cliente intenta reservar 1
     # Entonces: el sistema la rechaza
-    with pytest.raises(ReservaRechazada):
+    with pytest.raises(ReservaRechazada) as error:
         crear_reserva(
             catalogo, [], "bu-01", "M", 1, "nu", "Paula Andrade", AHORA
         )
+       # Hallazgo: el mensaje dice «quedan 0 libres» y no dice que la prenda no está disponible
+    assert "quedan 0 libres" in str(error.value)
 
 
 def test_a13_reserva_vence_a_las_24_horas(catalogo):
