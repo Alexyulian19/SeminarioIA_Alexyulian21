@@ -160,15 +160,15 @@ def test_a10_transferencia_sin_decir_cual(catalogo):
     for forma in ("efectivo", "nequi", "daviplata", "nu"):
         assert forma in motivo
 
-
 def test_a11_reserva_sin_precio(catalogo):
     # Dado: go-01 con precio 0 («Consultar precio»)
     # Cuando: un cliente intenta reservarla
     # Entonces: se rechaza porque no hay precio para calcular el total
-    with pytest.raises(ReservaRechazada):
+    with pytest.raises(ReservaRechazada) as error:
         crear_reserva(
             catalogo, [], "go-01", "UNICA", 1, "efectivo", "Diego Perdomo", AHORA
         )
+    assert "no tiene precio" in str(error.value)
 
 
 def test_a12_prenda_no_disponible(catalogo):
@@ -178,8 +178,7 @@ def test_a12_prenda_no_disponible(catalogo):
     with pytest.raises(ReservaRechazada) as error:
         crear_reserva(
             catalogo, [], "bu-01", "M", 1, "nu", "Paula Andrade", AHORA
-        )
-       # Hallazgo: el mensaje dice «quedan 0 libres» y no dice que la prenda no está disponible
+        ) # Hallazgo: el mensaje dice «quedan 0 libres» y no dice que la prenda no está disponible
     assert "quedan 0 libres" in str(error.value)
 
 
@@ -194,3 +193,11 @@ def test_a13_reserva_vence_a_las_24_horas(catalogo):
     assert reserva_vencida(reserva["creada_en"], ahora) is True
     assert reserva["vence_en"] == ahora
 
+
+def test_a16_reserva_sin_nombre(catalogo):
+    # Dado: th-01 talla 41 con 3 unidades libres
+    # Cuando: un cliente intenta reservar 1 sin escribir su nombre
+    # Entonces: el sistema la rechaza y pide el nombre
+    with pytest.raises(ReservaRechazada) as error:
+        crear_reserva(catalogo, [], "th-01", "41", 1, "efectivo", "   ", AHORA)
+    assert "nombre" in str(error.value)

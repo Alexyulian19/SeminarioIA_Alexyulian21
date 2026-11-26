@@ -61,3 +61,4 @@ forma de pago es efectivo y `None` si es transferencia (la verifica el equipo). 
 | A-13 | **Vencimiento a las 24 h.** Dado que la reserva en efectivo de A-05 se creó el 26-nov-2026 a las 10:00 a. m., cuando son las 10:00 a. m. del 27-nov-2026, entonces la reserva está vencida. | Se automatiza | `test_a13_reserva_vence_a_las_24_horas` |
 | A-14 | **Aviso al vencer.** Dado que una reserva en efectivo venció, cuando el sistema la cancela, entonces le avisa al cliente con el mensaje de cancelación. | Le Falta un Dato | sin prueba |
 | A-15 | **Respuesta clara.** Dado que un cliente reserva por WhatsApp, cuando recibe la confirmación, entonces entiende fácilmente qué tiene que hacer para pagar. | No es Observable | sin prueba |
+| A-16 | **Reserva sin nombre.** Dado que th-01 talla 41 tiene 3 unidades libres, cuando un cliente intenta reservar 1 sin escribir su nombre, entonces el sistema la rechaza y pide el nombre. | Se automatiza | test_a16_reserva_sin_nombre |
