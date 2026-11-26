@@ -1,0 +1,40 @@
+C4Container
+  title Nivel 2 · Contenedores: Catálogo y agente de WhatsApp de Urban
+
+  Person(cliente, "Cliente", "Ve el catálogo, pregunta, reserva y paga en efectivo o por transferencia")
+  Person(equipo, "Equipo del almacén", "El dueño y Alex. Editan el catálogo, verifican transferencias, entregan y responden chats desde la app")
+  System_Ext(wa, "WhatsApp Business Platform", "Meta, Cloud API. Un número compartido entre el asistente y la app del equipo")
+  System_Ext(ia, "API de Claude", "Anthropic. Modelo de lenguaje con llamadas a herramientas")
+
+  System_Boundary(urban, "Catálogo y agente de WhatsApp de Urban") {
+    Container(web, "Catálogo web", "HTML, CSS y JavaScript, hosting estático", "Muestra los productos por categoría, arma la reserva y la manda escrita a WhatsApp con el código de cada prenda")
+    ContainerDb(sheet, "Lista del catálogo", "Google Sheets", "Única fuente del catálogo. Una fila por producto, color y talla con precio y disponible. Otra pestaña con los datos de pago: Nequi, Daviplata, Nu y QR")
+    Container(app, "Servicio del agente", "Python, FastAPI, servidor en la nube 24/7", "Recibe el webhook, llama al modelo y valida sus 4 herramientas: buscar_prenda, crear_reserva, enviar_datos_pago y pasar_al_equipo. Cada 5 minutos vence las reservas de más de 24 horas")
+    ContainerDb(db, "Base de datos operativa", "PostgreSQL en Supabase", "Conversaciones, mensajes y pasos al equipo. Reservas con prendas, forma de pago, estado y vencimiento. Bloquea por prenda para no reservar dos veces")
+  }
+
+  Rel(cliente, web, "Ve prendas, precios y tallas y arma la reserva", "Navegador, HTTPS")
+  Rel(web, sheet, "Lee prendas, precios y disponibilidad", "HTTPS, CSV publicado")
+  Rel(web, wa, "Abre el chat con la reserva escrita", "Enlace wa.me")
+  Rel(cliente, wa, "Pregunta, reserva y envía comprobantes", "App de WhatsApp")
+  Rel(wa, cliente, "Entrega las respuestas", "App de WhatsApp")
+  Rel(equipo, wa, "Responde, confirma pagos y entregas en el chat", "App WhatsApp Business")
+  Rel(equipo, sheet, "Actualiza prendas, existencias y datos de pago", "Navegador o app, valida precio mayor que 0")
+  Rel(wa, app, "Entrega mensajes y copias del equipo", "Webhook HTTPS POST, JSON")
+  Rel(app, wa, "Responde, envía datos de pago y QR, avisa vencimientos", "HTTPS, Graph API, plantillas")
+  Rel(app, ia, "Envía la conversación y las herramientas", "HTTPS, JSON, tool use")
+  Rel(app, sheet, "Lee disponible, precio y datos de pago", "HTTPS, API de Sheets, solo lectura")
+  Rel(app, db, "Crea, vence y actualiza reservas en una transacción", "SQL, PostgreSQL sobre TLS")
+
+  UpdateRelStyle(cliente, wa, $offsetX="-250", $offsetY="-4")
+  UpdateRelStyle(wa, cliente, $offsetX="25", $offsetY="-19")
+  UpdateRelStyle(equipo, wa, $offsetX="40", $offsetY="10")
+  UpdateRelStyle(cliente, web, $offsetX="26", $offsetY="40")
+  UpdateRelStyle(web, wa, $offsetX="-261", $offsetY="47")
+  UpdateRelStyle(wa, app, $offsetX="-272", $offsetY="68")
+  UpdateRelStyle(app, wa, $offsetX="-154", $offsetY="188")
+  UpdateRelStyle(app, ia, $offsetX="-20", $offsetY="-159")
+  UpdateRelStyle(app, sheet, $offsetX="19", $offsetY="11")
+  UpdateRelStyle(app, db, $offsetX="-194", $offsetY="101")
+  UpdateRelStyle(web, sheet, $offsetX="-4", $offsetY="-104")
+  UpdateLayoutConfig($c4ShapeInRow="2", $c4BoundaryInRow="1")
