@@ -178,7 +178,9 @@ def test_a12_prenda_no_disponible(catalogo):
     with pytest.raises(ReservaRechazada) as error:
         crear_reserva(
             catalogo, [], "bu-01", "M", 1, "nu", "Paula Andrade", AHORA
-        ) # Hallazgo: el mensaje dice «quedan 0 libres» y no dice que la prenda no está disponible
+        ) 
+            # Hallazgo: el mensaje dice «quedan 0 libres» y no dice
+    # que la prenda no está disponible.
     assert "quedan 0 libres" in str(error.value)
 
 
