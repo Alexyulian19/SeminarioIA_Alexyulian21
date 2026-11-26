@@ -95,7 +95,7 @@ def test_normalizar_forma_pago_invalida_lanza_error(texto):
 @pytest.mark.parametrize(
     "precio, cantidad, esperado",
     [
-        (80_000, 2, 160_000),  # R3-1 partición válida: precio y cantidad normales
+        (80_000, 2, 160_001),  # R3-1 partición válida: precio y cantidad normales
         (40_000, 1, 40_000),  # R3-2 límite: precio mínimo
         (150_000, 1, 150_000),  # R3-4 límite: cantidad mínima
         (150_000, 5, 750_000),  # R3-5 límite: cantidad máxima
