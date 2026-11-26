@@ -36,7 +36,7 @@ Fecha: [AAAA-MM-DD]
 
 ## 4. Verificación
 
-- [ ] El pipeline corregido se ejecutó en GitHub y salió en verde: [enlace a la ejecución]
-- [ ] Hice fallar una prueba a propósito y el pipeline salió en rojo.
-- [ ] La imagen se construye (en mi equipo o en el pipeline).
-- [ ] No hay claves en ci.yml, en el Dockerfile ni en el historial de Git.
+- [x] El pipeline corregido se ejecutó en GitHub y salió en verde: https://github.com/Alexyulian19/SeminarioIA_Alexyulian21/actions/runs/45888663228?pr=4
+- [x] Hice fallar una prueba a propósito y el pipeline salió en rojo.
+- [x] La imagen se construye (en mi equipo o en el pipeline).
+- [x] No hay claves en ci.yml, en el Dockerfile ni en el historial de Git.
