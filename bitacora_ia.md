@@ -199,6 +199,21 @@ En la semana 7 rompí el código a propósito: las pruebas atraparon 4 de los 5 
 
 Esta bitácora me dejo ver algo muy valioso: que es el saber usar la IA como un apoyo y no como un reemplazo del  criterio. En lugar de quedarse uno con lo primero que te entregó, toca tomarse el trabajo de revisar a fondo y con seguridad, romper el código para ver si las pruebas de verdad servían y confirmar los datos en el historial de Git para no dejar mentiras en el reporte. Al final, la herramienta te ayudó a avanzar más rápido, pero lo que realmente le dio calidad y respaldo al proyecto fue el ojo crítico y el rigor al comprobar cada detalle.
 
+## Entrada 20: pipeline de GitHub Actions generado con IA
+- Herramienta: Claude, con el prompt simple de clase y sin contexto del repo.
+- Revisión humana: 5 problemas (sin permisos, Python 3.9/3.10, pytest sin versión, requirements.txt inexistente, sin ruff ni cobertura).
+- actionlint encontró 0.
+- Al corregirlo, el pipeline atrapó un comentario de más de 88 caracteres en test_aceptacion.py que nadie había visto.
+- Ejecución en verde: [https://github.com/Alexyulian19/SeminarioIA_Alexyulian21/actions/runs/45888663228?pr=4]
+
+## Entrada 21: Dockerfile generado con IA
+- Revisión humana: 5 puntos (imagen no slim, requirements.txt inexistente, COPY . . copiaba el .env con claves reales, corría como root; CMD pytest no era problema).
+- hadolint encontró 1 (DL3042, pip sin --no-cache-dir).
+- Corrección: imagen slim, usuario 10001, .dockerignore y copia solo de lo necesario.
+
+## Reflexión semana 9
+Si hubiera subido todo tal como lo dio la IA, habría tenido una falsa seguridad: el pipeline ni siquiera revisaba hubiera revisado bien el código y el Dockerfile dejabaria expuestas mis claves del .env corriendo como root. Lo más grave fue ese riesgo de seguridad y ver que los validadores automáticos solo atraparon 1 de 10 fallos; ya el resto los pude encontrar revisando a mano. Y como la IA no conoce los riesgos de mi proyecto ya que es de mi negocio estuve atento para prevenir por cualquier cosita o falla y ya para la próxima vez revisaré línea por línea qué archivos copia y qué permisos da antes de confiar en su código.
+
 ## Reflexión final (5 a 8 líneas)
 
 El asistente me ayudó más a convertir el contrato en pruebas concretas y a escribir la implementación rápido, en un solo intento.
