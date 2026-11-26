@@ -146,7 +146,7 @@ def test_a09_mas_de_cinco_unidades(catalogo):
         crear_reserva(
             catalogo, [], "ca-01", "M", 6, "efectivo", "Camilo Ramos", AHORA
         )
-        assert "quedan 8 libres" in str(error.value)
+    assert "quedan 8 libres" in str(error.value)
 
 def test_a10_transferencia_sin_decir_cual(catalogo):
     # Dado: th-01 en 41 con unidades
