@@ -242,3 +242,17 @@ La próxima vez me gustaría proponer yo mismo las pruebas que pueda identificar
 - **Problema con WhatsApp real:** Conecté el número de prueba de Meta con un túnel de cloudflared y el webhook quedó verificado, pero el agente no respondía. 1) No llegaban mensajes al servidor: publiqué la app en Meta y suscribí la cuenta de WhatsApp al webhook; desde ahí los mensajes sí llegaron. 2) El agente respondía pero el mensaje no aparecía en mi celular: agregué registro de errores al servidor y apareció el error 131031 «Business Account locked». 3) En Meta Business Support la cuenta sale «Cuenta restringida» con el aviso de que antes de enviar mensajes hay que verificar el negocio. Mi negocio sí está registrado, pero la verificación de Meta toma días, así que no alcanza para esta entrega. Guardé capturas como evidencia.
 - **Mientras tanto:** Para la demo y la exposición uso el chat local (http://127.0.0.1:8000), que simula la conversación de WhatsApp con el mismo agente, el mismo formato y las mismas reservas. Cuando Meta verifique el negocio, solo cambia el canal y el agente sigue igual.
 - **Commit relacionado:** rama `semana10-agente` (f1b0794 a la última)
+## Entrada: Supabase en producción y prueba de punta a punta (semana 10)
+
+- **Fecha:** 2026-11-27
+- **Prompt o sugerencia:** Le pedí a Claude guardar las reservas en PostgreSQL de Supabase siguiendo mi modelo ER y publicar el chat para que el profesor lo pruebe desde su celular, entrando por el catálogo.
+- **Qué hizo la IA:** `app/repositorio.py` (API REST de Supabase), `docs/supabase/crear_tablas.sql` con las tablas `reserva` y `linea_reserva`, RLS activo sin políticas públicas y la función `guardar_reserva`, que guarda la reserva y su línea en una sola transacción. También 8 pruebas con un HTTP falso (sin red), el panel del dueño con clave (`PANEL_CLAVE`), topes de mensajes y `render.yaml`. Las reglas de `reservas.py` no cambiaron. El SQL lo probó en PostgreSQL 16: si la línea falla, la reserva no queda.
+- **Decisión:** Aceptada. Supabase quedó conectado en producción (Render) y el chat web propio queda como canal mientras Meta verifica el negocio.
+- **Prueba real de punta a punta:** desde mi celular entré al catálogo en Netlify, elegí una prenda, el botón abrió el chat en Render con el mensaje escrito, hice la reserva y quedó guardada en Supabase (tablas `reserva` y `linea_reserva`) hoy a las 12:28 p. m.
+- **WhatsApp real:** sigue bloqueado por Meta (error 131031, cuenta restringida hasta verificar el negocio; la verificación está pendiente). Por eso uso el chat web propio con el mismo agente: cuando Meta apruebe, solo cambia el canal.
+- **Incidentes que encontré y resolví:**
+  1. En mi `.env` la línea quedó `SUPABASE_URL=SUPABASE_URL=https://...` (prefijo pegado dos veces), así que la dirección no era válida. Lo corregí dejando un solo `SUPABASE_URL=`.
+  2. En Render faltaban `SUPABASE_URL` y `SUPABASE_KEY`: el chat funcionaba, pero las reservas quedaban solo en memoria y se perdían al reiniciar. Agregué las dos variables en *Environment* y volví a desplegar.
+  3. `APIConnectionError` con Anthropic: la clave había quedado mal copiada. La volví a pegar y respondió.
+- **Lo que aprendí:** que las pruebas estén en verde no garantiza que la configuración esté bien. Los tres incidentes fueron de configuración (variables y claves), no de código, y solo aparecieron al probar el sistema completo de verdad.
+- **Commit relacionado:** PR #7 (`semana10-agente`) y PR #8 (`semana10-supabase`); esta entrada va en la rama `semana10-cierre`.

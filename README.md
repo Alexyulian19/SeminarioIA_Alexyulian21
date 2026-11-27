@@ -5,11 +5,30 @@
 Un agente de WhatsApp y un catálogo web para que los clientes de Urban, el almacén de ropa de mi familia en Neiva,
 consulten prendas, tallas y precios sin esperar a que el dueño les responda.
 
+### Demo en línea
+
+| Qué | Enlace |
+| --- | --- |
+| Catálogo web (Netlify) | https://coruscating-valkyrie-6fbd7a.netlify.app |
+| Chat con el agente (Render) | https://urban-agente.onrender.com |
+
+Recorrido: en el catálogo eliges una prenda y el botón de WhatsApp abre el chat del agente con el mensaje
+ya escrito. El agente (Claude con 4 herramientas) consulta talla, color y precio en el catálogo real y crea la
+reserva, que queda guardada en PostgreSQL de **Supabase** (tablas `reserva` y `linea_reserva`).
+
+> **Importante:** el chat es una página web propia con el mismo agente; **todavía no es WhatsApp real**.
+> El webhook de la WhatsApp Cloud API ya existe y quedó verificado con el número de prueba de Meta, pero Meta
+> bloquea el envío (error 131031, cuenta restringida) hasta verificar el negocio. Detalle en
+> [docs/agente_whatsapp.md](docs/agente_whatsapp.md). El plan gratis de Render se duerme a los 15 minutos:
+> el primer mensaje puede tardar cerca de un minuto.
+
 ## 2. Requisitos
 
 - Python 3.11 o superior.
-- Dependencias de desarrollo en `requirements-dev.txt` (pytest y ruff, con versiones fijadas).
-- La app solo usa la librería estándar de Python.
+- Dependencias del agente en `requirements.txt` (anthropic, fastapi, uvicorn, httpx, python-dotenv) y de
+  desarrollo en `requirements-dev.txt` (pytest, ruff, pytest-cov), con versiones fijadas.
+- Una clave de API de Anthropic en el archivo `.env` (`ANTHROPIC_API_KEY`). Opcional: `PANEL_CLAVE`,
+  `SUPABASE_URL` y `SUPABASE_KEY`.
 
 ## 3. Instalación
 
@@ -30,8 +49,18 @@ El archivo `.env` es solo local (está en `.gitignore`); llena allí tus claves 
 
 ## 4. Ejecución
 
-El webhook de WhatsApp todavía no existe. Hoy la funcionalidad disponible es la función `buscar_prenda`,
-que se puede probar desde la raíz del proyecto con un catálogo de una fila:
+El agente completo, en local:
+
+```powershell
+uvicorn app.servidor:crear_app --factory --reload
+```
+
+Abre http://127.0.0.1:8000 (chat) y http://127.0.0.1:8000/?panel=TU_PANEL_CLAVE (panel del dueño con las
+reservas). Sin navegador: `python -m app.consola`. Guía completa en
+[docs/agente_whatsapp.md](docs/agente_whatsapp.md); tablas de Supabase en
+[docs/supabase/crear_tablas.sql](docs/supabase/crear_tablas.sql).
+
+La función `buscar_prenda` (HU-01) también se puede probar sola con un catálogo de una fila:
 
 ```powershell
 python -c "from app.buscar_prenda import buscar_prenda; catalogo = [{'codigo': 'th-01', 'nombre': 'Tenis urbano blanco y dorado', 'talla': '41', 'precio': 150000, 'disponible': 'SI', 'cantidad': 3}]; print(buscar_prenda(catalogo, [], 'th-01', '41'))"
@@ -135,7 +164,8 @@ pytest
 ruff check --select E,F,B,S .
 ```
 
-Hay 57 pruebas:
+Hay 161 pruebas (cobertura 100 % de `app/`, `pytest --cov`), ninguna usa la red ni la API real: el agente se
+prueba con un cliente de Claude falso (`tests/falsos.py`) y Supabase con un HTTP falso. Entre ellas:
 
 - 13 de HU-01 en `tests/test_buscar_prenda.py`: casos normales, casos límite del contrato y casos de error.
 - 44 de las reglas de reservas (semana 7) en `tests/test_reservas.py`: vencimiento de 24 h, forma de pago,
@@ -149,12 +179,15 @@ están en [registro_pruebas.md](registro_pruebas.md).
 
 | Ruta | Contenido |
 | --- | --- |
-| `app/` | Código de la aplicación: `buscar_prenda.py` (HU-01) y `reservas.py` (reglas de las reservas). |
+| `app/` | Reglas: `buscar_prenda.py` (HU-01), `reservas.py` y `reservar.py`. Agente: `catalogo.py`, `herramientas.py`, `agente.py`, `repositorio.py` (Supabase), `servidor.py` (FastAPI y webhook), `consola.py` y `web/chat.html`. |
+| `datos/catalogo.csv` | Catálogo real que lee el agente (el mismo de la web). |
+| `docs/` | Documentos de los módulos, guía del agente, SQL de Supabase y plan de operación. |
+| `render.yaml` | Despliegue del chat en Render (las claves van en el panel de Render, no aquí). |
 | `tests/` | Pruebas con pytest y `conftest.py` con el fixture de datos sintéticos. |
 | `tests/datos/` | Datos sintéticos de reservas (CSV, ninguna persona real). |
 | `registro_pruebas.md` | Registro de pruebas de la semana 7. |
 | `pyproject.toml` | Versión de Python y configuración de pytest y ruff. |
-| `requirements-dev.txt` | Dependencias de desarrollo con versiones fijadas. |
+| `requirements.txt` / `requirements-dev.txt` | Dependencias del agente y de desarrollo, con versiones fijadas. |
 | `.env.example` | Plantilla de variables de entorno, con valores de relleno. |
 | `revision_seguridad.md` | Informe de revisión de código y seguridad (semana 6). |
 | `bitacora_ia.md` | Bitácora de uso de IA. |
@@ -165,6 +198,8 @@ están en [registro_pruebas.md](registro_pruebas.md).
 - Cada sugerencia se verificó con pytest y contra el catálogo real, y se aceptó, se ajustó o se rechazó (por ejemplo, se quitó un parámetro `color` que el catálogo no tiene).
 - En la semana 6, Claude Code revisó el código en modo solo lectura y un agente aplicó las correcciones en una rama aparte, que revisé antes del merge.
 - En la semana 7, la IA propuso los casos, las pruebas y los datos sintéticos a partir de mis reglas. Cada prueba se revisó con las tres preguntas (esperado de la regla, fallaría si rompo el código, no redundante) y el código se rompió a propósito 5 veces (rama `semana7-pruebas`).
+
+- En la semana 10, Claude construyó el agente (herramientas, servidor, chat, Supabase y despliegue) con pruebas primero; yo lo probé de punta a punta, decidí los supuestos y diagnostiqué los incidentes del despliegue (ver la última entrada de la bitácora).
 
 Detalle en [bitacora_ia.md](bitacora_ia.md), [revision_seguridad.md](revision_seguridad.md) y [registro_pruebas.md](registro_pruebas.md).
 
