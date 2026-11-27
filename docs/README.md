@@ -15,3 +15,9 @@ Entregas originales del seminario, tal como se subieron a la plataforma de la FE
 | 3. Diseño | 4 | [Diagramas C4 N1, C4 N2, secuencia y ER (Mermaid + PNG)](modulo3_diseno/diagramas/) |
 
 Los módulos 4 (código), 5 (pruebas) y 6 (operación) están en la raíz del repositorio: `app/`, `tests/`, `bitacora_ia.md`, `registro_pruebas.md` y `revision_seguridad.md`.
+
+
+## Entrega final
+
+- [Informe final (Word)](entrega/informe_final_CataUrban_v5.docx)
+- [Diapositivas de la sustentación (PDF)](entrega/Urban_diapositivas_dorado.pdf)
