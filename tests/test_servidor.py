@@ -201,3 +201,25 @@ def test_consola_termina_con_fin_de_archivo(catalogo_prueba):
     salida: list[str] = []
     conversar(Agente(ClienteFalso(), Tienda(catalogo_prueba)), leer, salida.append)
     assert len(salida) == 1
+
+
+def test_estado_fallido_queda_en_el_registro(armado, caplog):
+    http, *_ = armado
+    aviso = {"entry": [{"changes": [{"value": {"statuses": [
+        {"status": "failed", "errors": [{"code": 131026, "title": "No entregado"}]},
+        {"status": "failed"},
+        {"status": "delivered"},
+    ]}}]}]}
+    cuerpo = json.dumps(aviso).encode()
+    http.post("/webhook", content=cuerpo,
+              headers={"X-Hub-Signature-256": firmar(cuerpo)})
+    assert "131026: No entregado" in caplog.text
+    assert "?: " in caplog.text
+
+
+def test_aviso_vacio_queda_en_el_registro(armado, caplog):
+    http, *_ = armado
+    cuerpo = b"{}"
+    http.post("/webhook", content=cuerpo,
+              headers={"X-Hub-Signature-256": firmar(cuerpo)})
+    assert "sin mensajes" in caplog.text

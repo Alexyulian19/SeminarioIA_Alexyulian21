@@ -72,6 +72,25 @@ def mensajes_de_texto(aviso: dict) -> list[dict]:
     return encontrados
 
 
+def errores_de_entrega(aviso: dict) -> list[str]:
+    """Saca los errores de los avisos de estado (mensajes que Meta no entregó).
+
+    Returns:
+        Lista de textos "codigo: titulo" de cada estado "failed".
+    """
+    errores = []
+    for entrada in aviso.get("entry", []):
+        for cambio in entrada.get("changes", []):
+            for estado in cambio.get("value", {}).get("statuses", []):
+                if estado.get("status") == "failed":
+                    for error in estado.get("errors", []) or [{}]:
+                        errores.append(
+                            f"{error.get('code', '?')}: "
+                            f"{error.get('title') or error.get('message', '')}"
+                        )
+    return errores
+
+
 def crear_enviador(token: str, phone_number_id: str) -> Callable[[str, str], None]:
     """Función que envía un texto por la WhatsApp Cloud API."""
     url = f"https://graph.facebook.com/{VERSION_GRAPH}/{phone_number_id}/messages"
@@ -90,6 +109,8 @@ def crear_enviador(token: str, phone_number_id: str) -> Callable[[str, str], Non
         )
         if respuesta.status_code >= 400:
             logging.error("WhatsApp no aceptó el mensaje: %s", respuesta.text)
+        else:
+            logging.warning("Respuesta enviada a ...%s", numero[-4:])
 
     return enviar
 
@@ -167,7 +188,14 @@ def crear_app(
             aviso = json.loads(cuerpo or b"{}")
         except json.JSONDecodeError as error:
             raise HTTPException(status_code=400, detail="JSON inválido") from error
-        for mensaje in mensajes_de_texto(aviso):
+        for error in errores_de_entrega(aviso):
+            logging.error("WhatsApp no pudo entregar la respuesta: %s", error)
+        mensajes = mensajes_de_texto(aviso)
+        if not mensajes and not aviso.get("entry"):
+            logging.warning("Aviso de WhatsApp sin mensajes: %s", cuerpo[:300])
+        for mensaje in mensajes:
+            logging.warning("Mensaje de ...%s: %s", mensaje["de"][-4:],
+                            mensaje["texto"][:60])
             if mensaje["id"] in vistos:
                 continue  # Meta reenvía el mismo aviso si tardamos en contestar.
             vistos.add(mensaje["id"])
