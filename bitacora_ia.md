@@ -229,3 +229,14 @@ Las pruebas en verde no demuestran que el comportamiento no cambió si ninguna c
 Hacer las tablas me ayudó a pensar en problemas que no había pensado, como qué pasa a las 24 horas exactas o si el cliente escribe «Nequí», y me hace querer estar más atento a cualquier posible falla.
 Me sorprendió que 54 pruebas en verde dejaran pasar un caso del agente de WhatsApp: el salto de línea al final del mensaje. Solo apareció cuando rompí el código a propósito.
 La próxima vez me gustaría proponer yo mismo las pruebas que pueda identificar y apoyarme en la IA para hacerlas bien.
+
+## Entrada: agente de WhatsApp funcionando en local (semana 10)
+
+- **Fecha:** 2026-11-27
+- **Prompt o sugerencia:** Le pedí a Claude construir el agente que faltaba: Claude (API de Anthropic) con 4 herramientas (`buscar_productos`, `consultar_prenda`, `crear_reserva`, `pasar_a_dueno`) sobre mis funciones de `app/`, un servidor FastAPI con el webhook de WhatsApp y un chat local tipo WhatsApp para la demo.
+- **Qué hizo la IA:** escribió `app/catalogo.py`, `app/herramientas.py`, `app/agente.py`, `app/servidor.py`, `app/consola.py`, `app/web/chat.html`, las pruebas con un Claude falso (`tests/falsos.py` y 4 archivos de prueba, 67 pruebas nuevas), `requirements.txt`, `.env.example` y `docs/agente_whatsapp.md`. No cambió `buscar_prenda`, `reservas` ni `reservar`: el color se maneja filtrando el catálogo antes de llamarlas.
+- **Supuestos que puso la IA y que debo decidir:** cantidad vacía = 5 unidades; reservas en memoria; esfuerzo bajo del modelo.
+- **Decisión:** (la escribo yo después de revisar)
+- **Por qué:** (lo escribo yo)
+- **Verificación:** `pytest --cov`: 139 passed, cobertura 100 %; `ruff check .` limpio; probado también con Python 3.11 (el del pipeline). Prueba real en local con mi clave: (lo escribo yo)
+- **Commit relacionado:** (lo pongo yo)
