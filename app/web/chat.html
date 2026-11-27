@@ -52,10 +52,24 @@
   const chatId = "prueba-" + Math.random().toString(36).slice(2, 8);
   const lista = document.getElementById("mensajes");
 
+  // Negrilla al estilo WhatsApp (*texto*) sin usar innerHTML.
+  function pintar(div, texto) {
+    div.replaceChildren();
+    texto.split(/(\*[^*\n]+\*)/).forEach(parte => {
+      if (/^\*[^*\n]+\*$/.test(parte)) {
+        const b = document.createElement("b");
+        b.textContent = parte.slice(1, -1);
+        div.appendChild(b);
+      } else if (parte) {
+        div.appendChild(document.createTextNode(parte));
+      }
+    });
+  }
+
   function burbuja(texto, quien) {
     const div = document.createElement("div");
     div.className = "burbuja " + quien;
-    div.textContent = texto;
+    pintar(div, texto);
     lista.appendChild(div);
     lista.scrollTop = lista.scrollHeight;
     return div;
@@ -97,7 +111,7 @@
       });
       const datos = await r.json();
       espera.className = "burbuja agente";
-      espera.textContent = r.ok ? datos.respuesta : "Error del servidor: " + r.status;
+      pintar(espera, r.ok ? datos.respuesta : "Error del servidor: " + r.status);
     } catch (e) {
       espera.className = "burbuja agente";
       espera.textContent = "No hay conexión con el servidor.";

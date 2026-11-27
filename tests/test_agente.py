@@ -13,6 +13,7 @@ from app.agente import (
     MENSAJE_RECHAZO,
     MODELO_POR_DEFECTO,
     Agente,
+    formato_whatsapp,
 )
 from app.herramientas import HERRAMIENTAS, Tienda
 from tests.falsos import ClienteFalso, herramienta, respuesta, texto
@@ -163,3 +164,20 @@ def test_fallas_de_la_api_no_tumban_el_chat(tienda, error):
     assert tienda.avisos_dueno[-1]["motivo"] == "falla técnica del agente"
     # Se quita el mensaje que quedó sin respuesta: queda el primer intercambio.
     assert len(agente.chats["A"]) == 2
+
+
+@pytest.mark.parametrize("entrada, esperado", [
+    ("**Adidas Campus** a $130.000", "*Adidas Campus* a $130.000"),
+    ("## Tenis\n- **th-08** y **th-07**", "Tenis\n- *th-08* y *th-07*"),
+    ("Sin formato", "Sin formato"),
+    ("*Ya en WhatsApp*", "*Ya en WhatsApp*"),
+    ("Precio 2 ** 3 sin cerrar", "Precio 2 ** 3 sin cerrar"),
+])
+def test_formato_whatsapp(entrada, esperado):
+    assert formato_whatsapp(entrada) == esperado
+
+
+def test_la_respuesta_sale_en_formato_whatsapp(tienda):
+    cliente = ClienteFalso(respuesta("end_turn", texto("Tenemos **Adidas Campus**")))
+    assert Agente(cliente, tienda).responder("A", "hola") == "Tenemos *Adidas Campus*"
+    assert "un solo asterisco" in cliente.llamadas[0]["system"]

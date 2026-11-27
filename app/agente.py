@@ -7,6 +7,7 @@ y nunca llaman a la API real ni necesitan una clave.
 
 import logging
 import os
+import re
 
 import anthropic
 
@@ -49,6 +50,9 @@ para eso, para quejas o si piden una persona, usa pasar_a_dueno y dile al \
 cliente que el equipo le responde pronto.
 7. Si "precio" viene vacío o null, di "precio a consultar" y ofrece pasar al equipo.
 8. Escribe los precios así: $130.000.
+9. Escribe como en WhatsApp: texto plano, listas con guion y, si quieres \
+resaltar, un solo asterisco (*Adidas Campus*). Nada de **dobles asteriscos**, \
+títulos con # ni tablas.
 """
 
 
@@ -128,7 +132,7 @@ class Agente:
             if respuesta.stop_reason == "pause_turn":
                 continue
             if respuesta.stop_reason != "tool_use":
-                return _texto(respuesta.content) or MENSAJE_RECHAZO
+                return formato_whatsapp(_texto(respuesta.content)) or MENSAJE_RECHAZO
 
             resultados = []
             for bloque in respuesta.content:
@@ -147,6 +151,19 @@ class Agente:
         logging.warning("El agente llegó a %s vueltas en %s", MAX_VUELTAS, chat_id)
         self.chats[chat_id] = _hasta_ultima_respuesta(mensajes)
         return MENSAJE_FALLA
+
+
+def formato_whatsapp(texto: str) -> str:
+    """Pasa el Markdown que a veces escribe Claude al formato de WhatsApp.
+
+    Args:
+        texto: respuesta del modelo, por ejemplo "## Tenis\n**Adidas Campus**".
+    Returns:
+        El mismo texto con **negrilla** cambiada a *negrilla* y sin los # de
+        los títulos ("Tenis\n*Adidas Campus*").
+    """
+    texto = re.sub(r"\*\*(.+?)\*\*", r"*\1*", texto)
+    return re.sub(r"(?m)^#{1,6}\s+", "", texto).strip()
 
 
 def _texto(contenido) -> str:
