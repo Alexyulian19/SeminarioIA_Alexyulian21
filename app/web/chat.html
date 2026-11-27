@@ -1,0 +1,113 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Urban · chat de prueba</title>
+<style>
+  :root { --verde: #075e54; --claro: #dcf8c6; --fondo: #ece5dd; }
+  * { box-sizing: border-box; }
+  body { margin: 0; font-family: system-ui, sans-serif; background: #d1d7db;
+         display: flex; gap: 16px; justify-content: center; padding: 16px; }
+  .telefono { width: 400px; max-width: 100%; height: 92vh; display: flex;
+              flex-direction: column; background: var(--fondo); border-radius: 12px;
+              overflow: hidden; box-shadow: 0 4px 20px #0003; }
+  header { background: var(--verde); color: #fff; padding: 12px 16px; }
+  header b { display: block; } header small { opacity: .8; }
+  #mensajes { flex: 1; overflow-y: auto; padding: 12px; display: flex;
+              flex-direction: column; gap: 6px; }
+  .burbuja { max-width: 80%; padding: 8px 10px; border-radius: 8px; white-space:
+             pre-wrap; line-height: 1.35; box-shadow: 0 1px 1px #0002; }
+  .cliente { align-self: flex-end; background: var(--claro); }
+  .agente { align-self: flex-start; background: #fff; }
+  .escribiendo { font-style: italic; color: #667; }
+  form { display: flex; gap: 8px; padding: 8px; background: #f0f0f0; }
+  input { flex: 1; padding: 10px 14px; border-radius: 20px; border: 0; font-size: 15px; }
+  button { background: var(--verde); color: #fff; border: 0; border-radius: 20px;
+           padding: 0 16px; font-size: 15px; cursor: pointer; }
+  aside { width: 340px; background: #fff; border-radius: 12px; padding: 12px 16px;
+          height: 92vh; overflow-y: auto; font-size: 14px; }
+  aside h2 { font-size: 16px; color: var(--verde); }
+  aside li { margin-bottom: 8px; }
+  @media (max-width: 800px) { body { flex-direction: column; align-items: center; }
+    aside { height: auto; width: 400px; max-width: 100%; } }
+</style>
+</head>
+<body>
+<div class="telefono">
+  <header><b>Urban · Asistente</b><small>Chat de prueba en local (no es WhatsApp real)</small></header>
+  <div id="mensajes"></div>
+  <form id="formulario">
+    <input id="texto" autocomplete="off" placeholder="Escribe un mensaje" maxlength="1000">
+    <button>Enviar</button>
+  </form>
+</div>
+<aside>
+  <h2>Panel del dueño</h2>
+  <p>Reservas activas y avisos para el equipo (se actualiza solo).</p>
+  <h3>Reservas</h3><ul id="reservas"></ul>
+  <h3>Avisos al dueño</h3><ul id="avisos"></ul>
+</aside>
+<script>
+  const chatId = "prueba-" + Math.random().toString(36).slice(2, 8);
+  const lista = document.getElementById("mensajes");
+
+  function burbuja(texto, quien) {
+    const div = document.createElement("div");
+    div.className = "burbuja " + quien;
+    div.textContent = texto;
+    lista.appendChild(div);
+    lista.scrollTop = lista.scrollHeight;
+    return div;
+  }
+
+  async function actualizarPanel() {
+    try {
+      const datos = await (await fetch("/api/reservas")).json();
+      const ul = document.getElementById("reservas");
+      ul.replaceChildren(...datos.reservas.map(r => {
+        const li = document.createElement("li");
+        li.textContent = `${r.numero}: ${r.cantidad} x ${r.nombre} ${r.color} talla ` +
+          `${r.talla}, $${r.total.toLocaleString("es-CO")}, ${r.forma_pago}, ` +
+          `${r.cliente}` + (r.vence_en ? `, vence ${new Date(r.vence_en).toLocaleString("es-CO")}` : "");
+        return li;
+      }));
+      const av = document.getElementById("avisos");
+      av.replaceChildren(...datos.avisos_dueno.map(a => {
+        const li = document.createElement("li");
+        li.textContent = `${a.chat_id}: ${a.motivo}`;
+        return li;
+      }));
+    } catch (e) { /* el servidor se está reiniciando */ }
+  }
+
+  document.getElementById("formulario").addEventListener("submit", async (ev) => {
+    ev.preventDefault();
+    const campo = document.getElementById("texto");
+    const texto = campo.value.trim();
+    if (!texto) return;
+    campo.value = "";
+    burbuja(texto, "cliente");
+    const espera = burbuja("escribiendo…", "agente escribiendo");
+    try {
+      const r = await fetch("/api/chat", {
+        method: "POST",
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify({chat_id: chatId, texto}),
+      });
+      const datos = await r.json();
+      espera.className = "burbuja agente";
+      espera.textContent = r.ok ? datos.respuesta : "Error del servidor: " + r.status;
+    } catch (e) {
+      espera.className = "burbuja agente";
+      espera.textContent = "No hay conexión con el servidor.";
+    }
+    actualizarPanel();
+  });
+
+  burbuja("¡Hola! Soy el asistente de Urban. Pregúntame por tenis, busos, jeans, gorras…", "agente");
+  actualizarPanel();
+  setInterval(actualizarPanel, 5000);
+</script>
+</body>
+</html>
