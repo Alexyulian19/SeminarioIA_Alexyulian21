@@ -12,3 +12,7 @@ services:
         sync: false
       - key: PANEL_CLAVE
         sync: false
+      - key: SUPABASE_URL
+        sync: false
+      - key: SUPABASE_KEY
+        sync: false

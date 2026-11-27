@@ -85,8 +85,10 @@ Variables que se escriben en el panel de Render, nunca en el repo:
 - **Cantidad vacía = 5.** La columna `cantidad` del catálogo hoy está vacía
   (no se lleva inventario). El agente la toma como 5 (el máximo de una
   reserva). Si se llena la hoja con cantidades reales, se usan esas.
-- **Reservas en memoria.** Se pierden al reiniciar el servidor. Guardarlas en
-  Supabase queda como trabajo futuro.
+- **Reservas en Supabase.** Si `SUPABASE_URL` y `SUPABASE_KEY` están
+  configuradas, cada reserva se guarda (reserva + línea en una transacción, con
+  `docs/supabase/crear_tablas.sql`) y al arrancar se leen las guardadas. Sin
+  esas variables, o si la base no responde, siguen en memoria y el panel avisa.
 - **Color.** Si un producto tiene varios colores y el cliente no dice cuál, la
   herramienta responde con la lista de colores para que el agente pregunte.
 - **Modelo.** Por defecto `claude-opus-5-5` con esfuerzo bajo (respuestas
