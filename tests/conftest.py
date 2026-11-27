@@ -18,3 +18,15 @@ def reservas_sinteticas() -> list[dict]:
     """
     with open(DATOS / "reservas_sinteticas.csv", encoding="utf-8", newline="") as f:
         return list(csv.DictReader(f))
+
+
+@pytest.fixture
+def catalogo_prueba() -> list[dict]:
+    """Catálogo pequeño con las columnas de la web (datos de prueba).
+
+    th-08 tiene dos colores; je-01 tiene cantidad 2; go-01 no tiene precio;
+    bu-01 está marcado NO. La cantidad vacía se toma como 5.
+    """
+    from app.catalogo import cargar_catalogo
+
+    return cargar_catalogo(DATOS / "catalogo_prueba.csv")
