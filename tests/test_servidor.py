@@ -13,6 +13,7 @@ from app.herramientas import Tienda
 from tests.falsos import ClienteFalso, respuesta, texto
 
 SECRETO = "secreto-de-prueba"
+CLAVE_PANEL = "clave-panel-prueba"
 
 
 def aviso_de_texto(id_: str, de: str, cuerpo: str) -> dict:
@@ -35,7 +36,7 @@ def armado(catalogo_prueba):
     enviados: list[tuple[str, str]] = []
     app = servidor.crear_app(agente, lambda n, t: enviados.append((n, t)),
                              verify_token="mi-token",  # noqa: S106 (dato de prueba)
-                             app_secret=SECRETO)
+                             app_secret=SECRETO, panel_clave=CLAVE_PANEL)
     return TestClient(app), cliente, agente, enviados
 
 
@@ -64,7 +65,7 @@ def test_panel_de_reservas(armado):
         "codigo": "je-01", "talla": "32", "color": "", "cantidad": 1,
         "forma_pago": "efectivo", "cliente": "Valentina Rojas"}, "web-1")
     agente.tienda.ejecutar("pasar_a_dueno", {"motivo": "queja"}, "web-1")
-    datos = http.get("/api/reservas").json()
+    datos = http.get("/api/reservas", headers={"X-Clave-Panel": CLAVE_PANEL}).json()
     assert datos["reservas"][0]["numero"] == "R-0001"
     assert datos["reservas"][0]["vence_en"].endswith("-05:00")
     assert datos["avisos_dueno"][0]["motivo"] == "queja"
@@ -223,3 +224,51 @@ def test_aviso_vacio_queda_en_el_registro(armado, caplog):
     http.post("/webhook", content=cuerpo,
               headers={"X-Hub-Signature-256": firmar(cuerpo)})
     assert "sin mensajes" in caplog.text
+
+
+@pytest.mark.parametrize("cabeceras", [{}, {"X-Clave-Panel": "otra"}])
+def test_panel_sin_clave_correcta_se_rechaza(armado, cabeceras):
+    http, *_ = armado
+    assert http.get("/api/reservas", headers=cabeceras).status_code == 403
+
+
+def test_panel_apagado_si_no_hay_clave_configurada(catalogo_prueba):
+    app = servidor.crear_app(Agente(ClienteFalso(), Tienda(catalogo_prueba)))
+    r = TestClient(app).get("/api/reservas", headers={"X-Clave-Panel": ""})
+    assert r.status_code == 403
+
+
+def test_limite_por_chat(catalogo_prueba):
+    cliente = ClienteFalso(*(respuesta("end_turn", texto("ok")) for _ in range(3)))
+    app = servidor.crear_app(Agente(cliente, Tienda(catalogo_prueba)),
+                             limitador=servidor.Limitador(2, 100))
+    http = TestClient(app)
+    textos = [http.post("/api/chat", json={"chat_id": "a", "texto": "hola"}).json()
+              for _ in range(3)]
+    assert textos[-1]["respuesta"] == servidor.MENSAJE_LIMITE
+    assert len(cliente.llamadas) == 2
+    otro = http.post("/api/chat", json={"chat_id": "b", "texto": "hola"}).json()
+    assert otro["respuesta"] == "ok"
+
+
+def test_limite_total_tambien_aplica_al_webhook(catalogo_prueba):
+    cliente = ClienteFalso(respuesta("end_turn", texto("ok")))
+    enviados = []
+    app = servidor.crear_app(Agente(cliente, Tienda(catalogo_prueba)),
+                             lambda n, t: enviados.append(t),
+                             limitador=servidor.Limitador(10, 1))
+    http = TestClient(app)
+    for i in range(2):
+        http.post("/webhook", content=json.dumps(aviso_de_texto(f"w{i}", "573", "h")))
+    assert enviados == ["ok", servidor.MENSAJE_LIMITE]
+
+
+def test_limites_desde_el_entorno(monkeypatch):
+    monkeypatch.setenv("ANTHROPIC_API_KEY", "clave-falsa-de-prueba")
+    monkeypatch.setenv("PANEL_CLAVE", "abc")
+    monkeypatch.setenv("MAX_MENSAJES_POR_CHAT", "0")
+    http = TestClient(servidor.crear_app())
+    r = http.post("/api/chat", json={"chat_id": "a", "texto": "hola"})
+    assert r.json()["respuesta"] == servidor.MENSAJE_LIMITE
+    panel = http.get("/api/reservas", headers={"X-Clave-Panel": "abc"})
+    assert panel.status_code == 200
