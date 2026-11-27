@@ -1,0 +1,153 @@
+codigo,nombre,categoria,tipo,marca,calidad,color,muestra_color,etiqueta_color,talla,precio,precio_antes,disponible,cantidad,foto_url,foto_real
+th-08,Adidas Campus,tenis,Tenis hombre,Adidas,AAA,Suela blanca,#FFFFFF,Estilo,40,130000,150000,SI,,assets/img/productos/adidas-campus/campus-suela-blanca-1.webp | assets/img/productos/adidas-campus/campus-suela-blanca-2.webp | assets/img/productos/adidas-campus/campus-suela-blanca-3.webp,SI
+th-08,Adidas Campus,tenis,Tenis hombre,Adidas,AAA,Suela blanca,#FFFFFF,Estilo,41,130000,150000,SI,,assets/img/productos/adidas-campus/campus-suela-blanca-1.webp | assets/img/productos/adidas-campus/campus-suela-blanca-2.webp | assets/img/productos/adidas-campus/campus-suela-blanca-3.webp,SI
+th-08,Adidas Campus,tenis,Tenis hombre,Adidas,AAA,Suela blanca,#FFFFFF,Estilo,42,130000,150000,SI,,assets/img/productos/adidas-campus/campus-suela-blanca-1.webp | assets/img/productos/adidas-campus/campus-suela-blanca-2.webp | assets/img/productos/adidas-campus/campus-suela-blanca-3.webp,SI
+th-08,Adidas Campus,tenis,Tenis hombre,Adidas,AAA,Suela blanca,#FFFFFF,Estilo,43,130000,150000,SI,,assets/img/productos/adidas-campus/campus-suela-blanca-1.webp | assets/img/productos/adidas-campus/campus-suela-blanca-2.webp | assets/img/productos/adidas-campus/campus-suela-blanca-3.webp,SI
+th-08,Adidas Campus,tenis,Tenis hombre,Adidas,AAA,Suela blanca,#FFFFFF,Estilo,44,130000,150000,SI,,assets/img/productos/adidas-campus/campus-suela-blanca-1.webp | assets/img/productos/adidas-campus/campus-suela-blanca-2.webp | assets/img/productos/adidas-campus/campus-suela-blanca-3.webp,SI
+th-08,Adidas Campus,tenis,Tenis hombre,Adidas,AAA,Suela beige,#C99A63,Estilo,40,130000,150000,SI,,assets/img/productos/adidas-campus/campus-suela-beige-1.webp | assets/img/productos/adidas-campus/campus-suela-beige-2.webp | assets/img/productos/adidas-campus/campus-suela-beige-3.webp,SI
+th-08,Adidas Campus,tenis,Tenis hombre,Adidas,AAA,Suela beige,#C99A63,Estilo,41,130000,150000,SI,,assets/img/productos/adidas-campus/campus-suela-beige-1.webp | assets/img/productos/adidas-campus/campus-suela-beige-2.webp | assets/img/productos/adidas-campus/campus-suela-beige-3.webp,SI
+th-08,Adidas Campus,tenis,Tenis hombre,Adidas,AAA,Suela beige,#C99A63,Estilo,42,130000,150000,SI,,assets/img/productos/adidas-campus/campus-suela-beige-1.webp | assets/img/productos/adidas-campus/campus-suela-beige-2.webp | assets/img/productos/adidas-campus/campus-suela-beige-3.webp,SI
+th-08,Adidas Campus,tenis,Tenis hombre,Adidas,AAA,Suela beige,#C99A63,Estilo,43,130000,150000,SI,,assets/img/productos/adidas-campus/campus-suela-beige-1.webp | assets/img/productos/adidas-campus/campus-suela-beige-2.webp | assets/img/productos/adidas-campus/campus-suela-beige-3.webp,SI
+th-08,Adidas Campus,tenis,Tenis hombre,Adidas,AAA,Suela beige,#C99A63,Estilo,44,130000,150000,SI,,assets/img/productos/adidas-campus/campus-suela-beige-1.webp | assets/img/productos/adidas-campus/campus-suela-beige-2.webp | assets/img/productos/adidas-campus/campus-suela-beige-3.webp,SI
+th-07,Adidas Superstar,tenis,Tenis hombre,Adidas,AAA,Blanco,#FFFFFF,Color,40,150000,,SI,,assets/img/productos/adidas-superstar/superstar-blanco-1.webp | assets/img/productos/adidas-superstar/superstar-blanco-2.webp | assets/img/productos/adidas-superstar/superstar-blanco-3.webp,SI
+th-07,Adidas Superstar,tenis,Tenis hombre,Adidas,AAA,Blanco,#FFFFFF,Color,41,150000,,SI,,assets/img/productos/adidas-superstar/superstar-blanco-1.webp | assets/img/productos/adidas-superstar/superstar-blanco-2.webp | assets/img/productos/adidas-superstar/superstar-blanco-3.webp,SI
+th-07,Adidas Superstar,tenis,Tenis hombre,Adidas,AAA,Blanco,#FFFFFF,Color,42,150000,,SI,,assets/img/productos/adidas-superstar/superstar-blanco-1.webp | assets/img/productos/adidas-superstar/superstar-blanco-2.webp | assets/img/productos/adidas-superstar/superstar-blanco-3.webp,SI
+th-07,Adidas Superstar,tenis,Tenis hombre,Adidas,AAA,Blanco,#FFFFFF,Color,43,150000,,SI,,assets/img/productos/adidas-superstar/superstar-blanco-1.webp | assets/img/productos/adidas-superstar/superstar-blanco-2.webp | assets/img/productos/adidas-superstar/superstar-blanco-3.webp,SI
+th-07,Adidas Superstar,tenis,Tenis hombre,Adidas,AAA,Blanco,#FFFFFF,Color,44,150000,,SI,,assets/img/productos/adidas-superstar/superstar-blanco-1.webp | assets/img/productos/adidas-superstar/superstar-blanco-2.webp | assets/img/productos/adidas-superstar/superstar-blanco-3.webp,SI
+th-07,Adidas Superstar,tenis,Tenis hombre,Adidas,AAA,Negro,#111111,Color,40,150000,,SI,,assets/img/productos/adidas-superstar/superstar-negro-1.webp | assets/img/productos/adidas-superstar/superstar-negro-2.webp | assets/img/productos/adidas-superstar/superstar-negro-3.webp,SI
+th-07,Adidas Superstar,tenis,Tenis hombre,Adidas,AAA,Negro,#111111,Color,41,150000,,SI,,assets/img/productos/adidas-superstar/superstar-negro-1.webp | assets/img/productos/adidas-superstar/superstar-negro-2.webp | assets/img/productos/adidas-superstar/superstar-negro-3.webp,SI
+th-07,Adidas Superstar,tenis,Tenis hombre,Adidas,AAA,Negro,#111111,Color,42,150000,,SI,,assets/img/productos/adidas-superstar/superstar-negro-1.webp | assets/img/productos/adidas-superstar/superstar-negro-2.webp | assets/img/productos/adidas-superstar/superstar-negro-3.webp,SI
+th-07,Adidas Superstar,tenis,Tenis hombre,Adidas,AAA,Negro,#111111,Color,43,150000,,SI,,assets/img/productos/adidas-superstar/superstar-negro-1.webp | assets/img/productos/adidas-superstar/superstar-negro-2.webp | assets/img/productos/adidas-superstar/superstar-negro-3.webp,SI
+th-07,Adidas Superstar,tenis,Tenis hombre,Adidas,AAA,Negro,#111111,Color,44,150000,,SI,,assets/img/productos/adidas-superstar/superstar-negro-1.webp | assets/img/productos/adidas-superstar/superstar-negro-2.webp | assets/img/productos/adidas-superstar/superstar-negro-3.webp,SI
+th-06,Nike AF1 blanco,tenis,Tenis hombre,Nike,1.1,,,,40,150000,,SI,,assets/img/productos/tenis-hombre/nike-af1-blanco-1.webp | assets/img/productos/tenis-hombre/nike-af1-blanco-2.webp | assets/img/productos/tenis-hombre/nike-af1-blanco-3.webp,SI
+th-06,Nike AF1 blanco,tenis,Tenis hombre,Nike,1.1,,,,41,150000,,SI,,assets/img/productos/tenis-hombre/nike-af1-blanco-1.webp | assets/img/productos/tenis-hombre/nike-af1-blanco-2.webp | assets/img/productos/tenis-hombre/nike-af1-blanco-3.webp,SI
+th-06,Nike AF1 blanco,tenis,Tenis hombre,Nike,1.1,,,,42,150000,,SI,,assets/img/productos/tenis-hombre/nike-af1-blanco-1.webp | assets/img/productos/tenis-hombre/nike-af1-blanco-2.webp | assets/img/productos/tenis-hombre/nike-af1-blanco-3.webp,SI
+th-06,Nike AF1 blanco,tenis,Tenis hombre,Nike,1.1,,,,43,150000,,SI,,assets/img/productos/tenis-hombre/nike-af1-blanco-1.webp | assets/img/productos/tenis-hombre/nike-af1-blanco-2.webp | assets/img/productos/tenis-hombre/nike-af1-blanco-3.webp,SI
+th-06,Nike AF1 blanco,tenis,Tenis hombre,Nike,1.1,,,,44,150000,,SI,,assets/img/productos/tenis-hombre/nike-af1-blanco-1.webp | assets/img/productos/tenis-hombre/nike-af1-blanco-2.webp | assets/img/productos/tenis-hombre/nike-af1-blanco-3.webp,SI
+th-01,Tenis urbano blanco y dorado,tenis,Tenis hombre,Nike,AAA,,,,40,150000,,SI,,assets/img/productos/tenis-hombre/tenis-blanco-dorado.svg,NO
+th-01,Tenis urbano blanco y dorado,tenis,Tenis hombre,Nike,AAA,,,,41,150000,,SI,,assets/img/productos/tenis-hombre/tenis-blanco-dorado.svg,NO
+th-01,Tenis urbano blanco y dorado,tenis,Tenis hombre,Nike,AAA,,,,42,150000,,SI,,assets/img/productos/tenis-hombre/tenis-blanco-dorado.svg,NO
+th-01,Tenis urbano blanco y dorado,tenis,Tenis hombre,Nike,AAA,,,,43,150000,,SI,,assets/img/productos/tenis-hombre/tenis-blanco-dorado.svg,NO
+th-01,Tenis urbano blanco y dorado,tenis,Tenis hombre,Nike,AAA,,,,44,150000,,SI,,assets/img/productos/tenis-hombre/tenis-blanco-dorado.svg,NO
+th-02,Tenis urbano negro,tenis,Tenis hombre,Adidas,AAA,,,,40,160000,,SI,,assets/img/productos/tenis-hombre/tenis-negro.svg,NO
+th-02,Tenis urbano negro,tenis,Tenis hombre,Adidas,AAA,,,,41,160000,,SI,,assets/img/productos/tenis-hombre/tenis-negro.svg,NO
+th-02,Tenis urbano negro,tenis,Tenis hombre,Adidas,AAA,,,,42,160000,,SI,,assets/img/productos/tenis-hombre/tenis-negro.svg,NO
+th-02,Tenis urbano negro,tenis,Tenis hombre,Adidas,AAA,,,,43,160000,,SI,,assets/img/productos/tenis-hombre/tenis-negro.svg,NO
+th-02,Tenis urbano negro,tenis,Tenis hombre,Adidas,AAA,,,,44,160000,,SI,,assets/img/productos/tenis-hombre/tenis-negro.svg,NO
+th-03,Tenis gris con rojo,tenis,Tenis hombre,New Balance,AAA,,,,40,170000,,SI,,assets/img/productos/tenis-hombre/tenis-gris-rojo.svg,NO
+th-03,Tenis gris con rojo,tenis,Tenis hombre,New Balance,AAA,,,,41,170000,,SI,,assets/img/productos/tenis-hombre/tenis-gris-rojo.svg,NO
+th-03,Tenis gris con rojo,tenis,Tenis hombre,New Balance,AAA,,,,42,170000,,SI,,assets/img/productos/tenis-hombre/tenis-gris-rojo.svg,NO
+th-03,Tenis gris con rojo,tenis,Tenis hombre,New Balance,AAA,,,,43,170000,,SI,,assets/img/productos/tenis-hombre/tenis-gris-rojo.svg,NO
+th-03,Tenis gris con rojo,tenis,Tenis hombre,New Balance,AAA,,,,44,170000,,SI,,assets/img/productos/tenis-hombre/tenis-gris-rojo.svg,NO
+th-04,Tenis blanco clásico,tenis,Tenis hombre,Lacoste,AAA,,,,40,190000,,SI,,assets/img/productos/tenis-hombre/tenis-blanco-dorado.svg,NO
+th-04,Tenis blanco clásico,tenis,Tenis hombre,Lacoste,AAA,,,,41,190000,,SI,,assets/img/productos/tenis-hombre/tenis-blanco-dorado.svg,NO
+th-04,Tenis blanco clásico,tenis,Tenis hombre,Lacoste,AAA,,,,42,190000,,SI,,assets/img/productos/tenis-hombre/tenis-blanco-dorado.svg,NO
+th-04,Tenis blanco clásico,tenis,Tenis hombre,Lacoste,AAA,,,,43,190000,,SI,,assets/img/productos/tenis-hombre/tenis-blanco-dorado.svg,NO
+th-04,Tenis blanco clásico,tenis,Tenis hombre,Lacoste,AAA,,,,44,190000,,SI,,assets/img/productos/tenis-hombre/tenis-blanco-dorado.svg,NO
+th-05,Tenis negro suela roja,tenis,Tenis hombre,Le Coq Sportif,AAA,,,,40,150000,,SI,,assets/img/productos/tenis-hombre/le-coq-sportif-negro-rojo-1.webp | assets/img/productos/tenis-hombre/le-coq-sportif-negro-rojo-2.webp | assets/img/productos/tenis-hombre/le-coq-sportif-negro-rojo-3.webp,SI
+th-05,Tenis negro suela roja,tenis,Tenis hombre,Le Coq Sportif,AAA,,,,41,150000,,SI,,assets/img/productos/tenis-hombre/le-coq-sportif-negro-rojo-1.webp | assets/img/productos/tenis-hombre/le-coq-sportif-negro-rojo-2.webp | assets/img/productos/tenis-hombre/le-coq-sportif-negro-rojo-3.webp,SI
+th-05,Tenis negro suela roja,tenis,Tenis hombre,Le Coq Sportif,AAA,,,,42,150000,,SI,,assets/img/productos/tenis-hombre/le-coq-sportif-negro-rojo-1.webp | assets/img/productos/tenis-hombre/le-coq-sportif-negro-rojo-2.webp | assets/img/productos/tenis-hombre/le-coq-sportif-negro-rojo-3.webp,SI
+th-05,Tenis negro suela roja,tenis,Tenis hombre,Le Coq Sportif,AAA,,,,43,150000,,SI,,assets/img/productos/tenis-hombre/le-coq-sportif-negro-rojo-1.webp | assets/img/productos/tenis-hombre/le-coq-sportif-negro-rojo-2.webp | assets/img/productos/tenis-hombre/le-coq-sportif-negro-rojo-3.webp,SI
+th-05,Tenis negro suela roja,tenis,Tenis hombre,Le Coq Sportif,AAA,,,,44,150000,,SI,,assets/img/productos/tenis-hombre/le-coq-sportif-negro-rojo-1.webp | assets/img/productos/tenis-hombre/le-coq-sportif-negro-rojo-2.webp | assets/img/productos/tenis-hombre/le-coq-sportif-negro-rojo-3.webp,SI
+bu-01,Buso negro cuello redondo,busos,Buso cuello redondo,[MARCA],AAA,,,,M,78000,,SI,,assets/img/productos/busos/buso-redondo-negro.svg,NO
+bu-01,Buso negro cuello redondo,busos,Buso cuello redondo,[MARCA],AAA,,,,L,78000,,SI,,assets/img/productos/busos/buso-redondo-negro.svg,NO
+bu-01,Buso negro cuello redondo,busos,Buso cuello redondo,[MARCA],AAA,,,,XL,78000,,SI,,assets/img/productos/busos/buso-redondo-negro.svg,NO
+bu-01,Buso negro cuello redondo,busos,Buso cuello redondo,[MARCA],AAA,,,,XXL,78000,,SI,,assets/img/productos/busos/buso-redondo-negro.svg,NO
+bu-01,Buso negro cuello redondo,busos,Buso cuello redondo,[MARCA],AAA,,,,3XL,98000,,SI,,assets/img/productos/busos/buso-redondo-negro.svg,NO
+bu-01,Buso negro cuello redondo,busos,Buso cuello redondo,[MARCA],AAA,,,,4XL,98000,,SI,,assets/img/productos/busos/buso-redondo-negro.svg,NO
+bu-02,Buso blanco cuello redondo,busos,Buso cuello redondo,[MARCA],1.1,,,,M,88000,,SI,,assets/img/productos/busos/buso-redondo-blanco.svg,NO
+bu-02,Buso blanco cuello redondo,busos,Buso cuello redondo,[MARCA],1.1,,,,L,88000,,SI,,assets/img/productos/busos/buso-redondo-blanco.svg,NO
+bu-02,Buso blanco cuello redondo,busos,Buso cuello redondo,[MARCA],1.1,,,,XL,88000,,SI,,assets/img/productos/busos/buso-redondo-blanco.svg,NO
+bu-02,Buso blanco cuello redondo,busos,Buso cuello redondo,[MARCA],1.1,,,,XXL,88000,,SI,,assets/img/productos/busos/buso-redondo-blanco.svg,NO
+bu-02,Buso blanco cuello redondo,busos,Buso cuello redondo,[MARCA],1.1,,,,3XL,98000,,SI,,assets/img/productos/busos/buso-redondo-blanco.svg,NO
+bu-02,Buso blanco cuello redondo,busos,Buso cuello redondo,[MARCA],1.1,,,,4XL,98000,,SI,,assets/img/productos/busos/buso-redondo-blanco.svg,NO
+bu-03,Camibuso azul,busos,Buso tipo camibuso,[MARCA],AAA,,,,M,78000,,SI,,assets/img/productos/busos/buso-camibuso-azul.svg,NO
+bu-03,Camibuso azul,busos,Buso tipo camibuso,[MARCA],AAA,,,,L,78000,,SI,,assets/img/productos/busos/buso-camibuso-azul.svg,NO
+bu-03,Camibuso azul,busos,Buso tipo camibuso,[MARCA],AAA,,,,XL,78000,,SI,,assets/img/productos/busos/buso-camibuso-azul.svg,NO
+bu-03,Camibuso azul,busos,Buso tipo camibuso,[MARCA],AAA,,,,XXL,78000,,SI,,assets/img/productos/busos/buso-camibuso-azul.svg,NO
+bu-03,Camibuso azul,busos,Buso tipo camibuso,[MARCA],AAA,,,,3XL,98000,,SI,,assets/img/productos/busos/buso-camibuso-azul.svg,NO
+bu-03,Camibuso azul,busos,Buso tipo camibuso,[MARCA],AAA,,,,4XL,98000,,SI,,assets/img/productos/busos/buso-camibuso-azul.svg,NO
+bu-04,Camibuso beige,busos,Buso tipo camibuso,[MARCA],1.1,,,,M,88000,,SI,,assets/img/productos/busos/buso-camibuso-beige.svg,NO
+bu-04,Camibuso beige,busos,Buso tipo camibuso,[MARCA],1.1,,,,L,88000,,SI,,assets/img/productos/busos/buso-camibuso-beige.svg,NO
+bu-04,Camibuso beige,busos,Buso tipo camibuso,[MARCA],1.1,,,,XL,88000,,SI,,assets/img/productos/busos/buso-camibuso-beige.svg,NO
+bu-04,Camibuso beige,busos,Buso tipo camibuso,[MARCA],1.1,,,,XXL,88000,,SI,,assets/img/productos/busos/buso-camibuso-beige.svg,NO
+bu-04,Camibuso beige,busos,Buso tipo camibuso,[MARCA],1.1,,,,3XL,98000,,SI,,assets/img/productos/busos/buso-camibuso-beige.svg,NO
+bu-04,Camibuso beige,busos,Buso tipo camibuso,[MARCA],1.1,,,,4XL,98000,,SI,,assets/img/productos/busos/buso-camibuso-beige.svg,NO
+je-01,Jean azul clásico,jeans,Jean,Huba,Marca,,,,28,88000,,SI,,assets/img/productos/jeans/jean-azul-clasico.svg,NO
+je-01,Jean azul clásico,jeans,Jean,Huba,Marca,,,,30,88000,,SI,,assets/img/productos/jeans/jean-azul-clasico.svg,NO
+je-01,Jean azul clásico,jeans,Jean,Huba,Marca,,,,32,88000,,SI,,assets/img/productos/jeans/jean-azul-clasico.svg,NO
+je-01,Jean azul clásico,jeans,Jean,Huba,Marca,,,,34,88000,,SI,,assets/img/productos/jeans/jean-azul-clasico.svg,NO
+je-01,Jean azul clásico,jeans,Jean,Huba,Marca,,,,36,88000,,SI,,assets/img/productos/jeans/jean-azul-clasico.svg,NO
+je-01,Jean azul clásico,jeans,Jean,Huba,Marca,,,,38,88000,,SI,,assets/img/productos/jeans/jean-azul-clasico.svg,NO
+je-01,Jean azul clásico,jeans,Jean,Huba,Marca,,,,40,88000,,SI,,assets/img/productos/jeans/jean-azul-clasico.svg,NO
+je-02,Jean negro,jeans,Jean,Bumerang,Marca,,,,28,98000,,SI,,assets/img/productos/jeans/jean-negro.svg,NO
+je-02,Jean negro,jeans,Jean,Bumerang,Marca,,,,30,98000,,SI,,assets/img/productos/jeans/jean-negro.svg,NO
+je-02,Jean negro,jeans,Jean,Bumerang,Marca,,,,32,98000,,SI,,assets/img/productos/jeans/jean-negro.svg,NO
+je-02,Jean negro,jeans,Jean,Bumerang,Marca,,,,34,98000,,SI,,assets/img/productos/jeans/jean-negro.svg,NO
+je-02,Jean negro,jeans,Jean,Bumerang,Marca,,,,36,98000,,SI,,assets/img/productos/jeans/jean-negro.svg,NO
+je-02,Jean negro,jeans,Jean,Bumerang,Marca,,,,38,98000,,SI,,assets/img/productos/jeans/jean-negro.svg,NO
+je-02,Jean negro,jeans,Jean,Bumerang,Marca,,,,40,98000,,SI,,assets/img/productos/jeans/jean-negro.svg,NO
+je-03,Jean azul claro,jeans,Jean,Huba,Marca,,,,28,88000,,SI,,assets/img/productos/jeans/jean-claro.svg,NO
+je-03,Jean azul claro,jeans,Jean,Huba,Marca,,,,30,88000,,SI,,assets/img/productos/jeans/jean-claro.svg,NO
+je-03,Jean azul claro,jeans,Jean,Huba,Marca,,,,32,88000,,SI,,assets/img/productos/jeans/jean-claro.svg,NO
+je-03,Jean azul claro,jeans,Jean,Huba,Marca,,,,34,88000,,SI,,assets/img/productos/jeans/jean-claro.svg,NO
+je-03,Jean azul claro,jeans,Jean,Huba,Marca,,,,36,88000,,SI,,assets/img/productos/jeans/jean-claro.svg,NO
+je-03,Jean azul claro,jeans,Jean,Huba,Marca,,,,38,88000,,SI,,assets/img/productos/jeans/jean-claro.svg,NO
+je-03,Jean azul claro,jeans,Jean,Huba,Marca,,,,40,88000,,SI,,assets/img/productos/jeans/jean-claro.svg,NO
+be-01,Bermuda azul,bermudas,Bermuda de jean,[MARCA],Marca,,,,28,78000,,SI,,assets/img/productos/bermudas/bermuda-azul.svg,NO
+be-01,Bermuda azul,bermudas,Bermuda de jean,[MARCA],Marca,,,,30,78000,,SI,,assets/img/productos/bermudas/bermuda-azul.svg,NO
+be-01,Bermuda azul,bermudas,Bermuda de jean,[MARCA],Marca,,,,32,78000,,SI,,assets/img/productos/bermudas/bermuda-azul.svg,NO
+be-01,Bermuda azul,bermudas,Bermuda de jean,[MARCA],Marca,,,,34,78000,,SI,,assets/img/productos/bermudas/bermuda-azul.svg,NO
+be-01,Bermuda azul,bermudas,Bermuda de jean,[MARCA],Marca,,,,36,78000,,SI,,assets/img/productos/bermudas/bermuda-azul.svg,NO
+be-01,Bermuda azul,bermudas,Bermuda de jean,[MARCA],Marca,,,,38,78000,,SI,,assets/img/productos/bermudas/bermuda-azul.svg,NO
+be-01,Bermuda azul,bermudas,Bermuda de jean,[MARCA],Marca,,,,40,78000,,SI,,assets/img/productos/bermudas/bermuda-azul.svg,NO
+be-02,Bermuda azul claro,bermudas,Bermuda de jean,[MARCA],Marca,,,,28,88000,,SI,,assets/img/productos/bermudas/bermuda-clara.svg,NO
+be-02,Bermuda azul claro,bermudas,Bermuda de jean,[MARCA],Marca,,,,30,88000,,SI,,assets/img/productos/bermudas/bermuda-clara.svg,NO
+be-02,Bermuda azul claro,bermudas,Bermuda de jean,[MARCA],Marca,,,,32,88000,,SI,,assets/img/productos/bermudas/bermuda-clara.svg,NO
+be-02,Bermuda azul claro,bermudas,Bermuda de jean,[MARCA],Marca,,,,34,88000,,SI,,assets/img/productos/bermudas/bermuda-clara.svg,NO
+be-02,Bermuda azul claro,bermudas,Bermuda de jean,[MARCA],Marca,,,,36,88000,,SI,,assets/img/productos/bermudas/bermuda-clara.svg,NO
+be-02,Bermuda azul claro,bermudas,Bermuda de jean,[MARCA],Marca,,,,38,88000,,SI,,assets/img/productos/bermudas/bermuda-clara.svg,NO
+be-02,Bermuda azul claro,bermudas,Bermuda de jean,[MARCA],Marca,,,,40,88000,,SI,,assets/img/productos/bermudas/bermuda-clara.svg,NO
+pa-01,Pantaloneta negra con franja dorada,pantalonetas,Pantaloneta deportiva,[MARCA],Marca,,,,M,68000,,SI,,assets/img/productos/pantalonetas/pantaloneta-negra.svg,NO
+pa-01,Pantaloneta negra con franja dorada,pantalonetas,Pantaloneta deportiva,[MARCA],Marca,,,,L,68000,,SI,,assets/img/productos/pantalonetas/pantaloneta-negra.svg,NO
+pa-01,Pantaloneta negra con franja dorada,pantalonetas,Pantaloneta deportiva,[MARCA],Marca,,,,XL,68000,,SI,,assets/img/productos/pantalonetas/pantaloneta-negra.svg,NO
+pa-01,Pantaloneta negra con franja dorada,pantalonetas,Pantaloneta deportiva,[MARCA],Marca,,,,XXL,68000,,SI,,assets/img/productos/pantalonetas/pantaloneta-negra.svg,NO
+pa-02,Pantaloneta azul,pantalonetas,Pantaloneta deportiva,[MARCA],Marca,,,,M,58000,,SI,,assets/img/productos/pantalonetas/pantaloneta-azul.svg,NO
+pa-02,Pantaloneta azul,pantalonetas,Pantaloneta deportiva,[MARCA],Marca,,,,L,58000,,SI,,assets/img/productos/pantalonetas/pantaloneta-azul.svg,NO
+pa-02,Pantaloneta azul,pantalonetas,Pantaloneta deportiva,[MARCA],Marca,,,,XL,58000,,SI,,assets/img/productos/pantalonetas/pantaloneta-azul.svg,NO
+pa-02,Pantaloneta azul,pantalonetas,Pantaloneta deportiva,[MARCA],Marca,,,,XXL,58000,,SI,,assets/img/productos/pantalonetas/pantaloneta-azul.svg,NO
+su-01,Sudadera negra con franja,sudaderas,Sudadera deportiva,[MARCA],Marca,,,,M,78000,,SI,,assets/img/productos/sudaderas/sudadera-negra.svg,NO
+su-01,Sudadera negra con franja,sudaderas,Sudadera deportiva,[MARCA],Marca,,,,L,78000,,SI,,assets/img/productos/sudaderas/sudadera-negra.svg,NO
+su-01,Sudadera negra con franja,sudaderas,Sudadera deportiva,[MARCA],Marca,,,,XL,78000,,SI,,assets/img/productos/sudaderas/sudadera-negra.svg,NO
+su-01,Sudadera negra con franja,sudaderas,Sudadera deportiva,[MARCA],Marca,,,,XXL,78000,,SI,,assets/img/productos/sudaderas/sudadera-negra.svg,NO
+su-02,Sudadera gris,sudaderas,Sudadera deportiva,[MARCA],Marca,,,,M,78000,,SI,,assets/img/productos/sudaderas/sudadera-gris.svg,NO
+su-02,Sudadera gris,sudaderas,Sudadera deportiva,[MARCA],Marca,,,,L,78000,,SI,,assets/img/productos/sudaderas/sudadera-gris.svg,NO
+su-02,Sudadera gris,sudaderas,Sudadera deportiva,[MARCA],Marca,,,,XL,78000,,SI,,assets/img/productos/sudaderas/sudadera-gris.svg,NO
+su-02,Sudadera gris,sudaderas,Sudadera deportiva,[MARCA],Marca,,,,XXL,78000,,SI,,assets/img/productos/sudaderas/sudadera-gris.svg,NO
+go-01,Gorra negra,gorras,Gorra,[MARCA],Marca,,,,UNICA,48000,,SI,,assets/img/productos/gorras/gorra-negra.svg,NO
+go-02,Gorra blanca,gorras,Gorra,[MARCA],Marca,,,,UNICA,58000,,SI,,assets/img/productos/gorras/gorra-blanca.svg,NO
+go-03,Gorra beige,gorras,Gorra,[MARCA],Marca,,,,UNICA,68000,,SI,,assets/img/productos/gorras/gorra-beige.svg,NO
+td-05,Adidas Samba,dama,Tenis dama,Adidas,AAA,,,,37,140000,,SI,,assets/img/productos/tenis-dama/adidas-samba-blanco-1.webp | assets/img/productos/tenis-dama/adidas-samba-blanco-2.webp | assets/img/productos/tenis-dama/adidas-samba-blanco-3.webp,SI
+td-05,Adidas Samba,dama,Tenis dama,Adidas,AAA,,,,38,140000,,SI,,assets/img/productos/tenis-dama/adidas-samba-blanco-1.webp | assets/img/productos/tenis-dama/adidas-samba-blanco-2.webp | assets/img/productos/tenis-dama/adidas-samba-blanco-3.webp,SI
+td-05,Adidas Samba,dama,Tenis dama,Adidas,AAA,,,,39,140000,,SI,,assets/img/productos/tenis-dama/adidas-samba-blanco-1.webp | assets/img/productos/tenis-dama/adidas-samba-blanco-2.webp | assets/img/productos/tenis-dama/adidas-samba-blanco-3.webp,SI
+td-05,Adidas Samba,dama,Tenis dama,Adidas,AAA,,,,40,140000,,SI,,assets/img/productos/tenis-dama/adidas-samba-blanco-1.webp | assets/img/productos/tenis-dama/adidas-samba-blanco-2.webp | assets/img/productos/tenis-dama/adidas-samba-blanco-3.webp,SI
+td-04,Adidas Superstar,dama,Tenis dama,Adidas,AAA,Blanco,#FFFFFF,Color,37,150000,,SI,,assets/img/productos/adidas-superstar/superstar-blanco-1.webp | assets/img/productos/adidas-superstar/superstar-blanco-2.webp | assets/img/productos/adidas-superstar/superstar-blanco-3.webp,SI
+td-04,Adidas Superstar,dama,Tenis dama,Adidas,AAA,Blanco,#FFFFFF,Color,38,150000,,SI,,assets/img/productos/adidas-superstar/superstar-blanco-1.webp | assets/img/productos/adidas-superstar/superstar-blanco-2.webp | assets/img/productos/adidas-superstar/superstar-blanco-3.webp,SI
+td-04,Adidas Superstar,dama,Tenis dama,Adidas,AAA,Blanco,#FFFFFF,Color,39,150000,,SI,,assets/img/productos/adidas-superstar/superstar-blanco-1.webp | assets/img/productos/adidas-superstar/superstar-blanco-2.webp | assets/img/productos/adidas-superstar/superstar-blanco-3.webp,SI
+td-04,Adidas Superstar,dama,Tenis dama,Adidas,AAA,Blanco,#FFFFFF,Color,40,150000,,SI,,assets/img/productos/adidas-superstar/superstar-blanco-1.webp | assets/img/productos/adidas-superstar/superstar-blanco-2.webp | assets/img/productos/adidas-superstar/superstar-blanco-3.webp,SI
+td-04,Adidas Superstar,dama,Tenis dama,Adidas,AAA,Negro,#111111,Color,37,150000,,SI,,assets/img/productos/adidas-superstar/superstar-negro-1.webp | assets/img/productos/adidas-superstar/superstar-negro-2.webp | assets/img/productos/adidas-superstar/superstar-negro-3.webp,SI
+td-04,Adidas Superstar,dama,Tenis dama,Adidas,AAA,Negro,#111111,Color,38,150000,,SI,,assets/img/productos/adidas-superstar/superstar-negro-1.webp | assets/img/productos/adidas-superstar/superstar-negro-2.webp | assets/img/productos/adidas-superstar/superstar-negro-3.webp,SI
+td-04,Adidas Superstar,dama,Tenis dama,Adidas,AAA,Negro,#111111,Color,39,150000,,SI,,assets/img/productos/adidas-superstar/superstar-negro-1.webp | assets/img/productos/adidas-superstar/superstar-negro-2.webp | assets/img/productos/adidas-superstar/superstar-negro-3.webp,SI
+td-04,Adidas Superstar,dama,Tenis dama,Adidas,AAA,Negro,#111111,Color,40,150000,,SI,,assets/img/productos/adidas-superstar/superstar-negro-1.webp | assets/img/productos/adidas-superstar/superstar-negro-2.webp | assets/img/productos/adidas-superstar/superstar-negro-3.webp,SI
+td-01,Tenis plataforma rosa,dama,Tenis dama,[MARCA],AAA,,,,37,140000,,SI,,assets/img/productos/tenis-dama/tenis-dama-rosa.svg,NO
+td-01,Tenis plataforma rosa,dama,Tenis dama,[MARCA],AAA,,,,38,140000,,SI,,assets/img/productos/tenis-dama/tenis-dama-rosa.svg,NO
+td-01,Tenis plataforma rosa,dama,Tenis dama,[MARCA],AAA,,,,39,140000,,SI,,assets/img/productos/tenis-dama/tenis-dama-rosa.svg,NO
+td-01,Tenis plataforma rosa,dama,Tenis dama,[MARCA],AAA,,,,40,140000,,SI,,assets/img/productos/tenis-dama/tenis-dama-rosa.svg,NO
+td-02,Tenis plataforma blanco,dama,Tenis dama,[MARCA],AAA,,,,37,150000,,SI,,assets/img/productos/tenis-dama/tenis-dama-blanco.svg,NO
+td-02,Tenis plataforma blanco,dama,Tenis dama,[MARCA],AAA,,,,38,150000,,SI,,assets/img/productos/tenis-dama/tenis-dama-blanco.svg,NO
+td-02,Tenis plataforma blanco,dama,Tenis dama,[MARCA],AAA,,,,39,150000,,SI,,assets/img/productos/tenis-dama/tenis-dama-blanco.svg,NO
+td-02,Tenis plataforma blanco,dama,Tenis dama,[MARCA],AAA,,,,40,150000,,SI,,assets/img/productos/tenis-dama/tenis-dama-blanco.svg,NO
+td-03,Tenis plataforma lila,dama,Tenis dama,[MARCA],AAA,,,,37,140000,,SI,,assets/img/productos/tenis-dama/tenis-dama-lila.svg,NO
+td-03,Tenis plataforma lila,dama,Tenis dama,[MARCA],AAA,,,,38,140000,,SI,,assets/img/productos/tenis-dama/tenis-dama-lila.svg,NO
+td-03,Tenis plataforma lila,dama,Tenis dama,[MARCA],AAA,,,,39,140000,,SI,,assets/img/productos/tenis-dama/tenis-dama-lila.svg,NO
+td-03,Tenis plataforma lila,dama,Tenis dama,[MARCA],AAA,,,,40,140000,,SI,,assets/img/productos/tenis-dama/tenis-dama-lila.svg,NO
