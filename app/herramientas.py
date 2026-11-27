@@ -6,6 +6,7 @@ mientras corre el servidor; Supabase queda como trabajo futuro.
 """
 
 import json
+import logging
 from collections.abc import Callable
 from datetime import datetime, timedelta, timezone
 
@@ -119,15 +120,27 @@ class Tienda:
     Args:
         catalogo: filas leídas con cargar_catalogo.
         reloj: función que da la hora actual (en las pruebas, una hora fija).
+        repositorio: dónde se guardan las reservas (Supabase), con guardar y
+            cargar; None = solo en memoria.
     """
 
     def __init__(
-        self, catalogo: list[dict], reloj: Callable[[], datetime] = ahora_colombia
+        self,
+        catalogo: list[dict],
+        reloj: Callable[[], datetime] = ahora_colombia,
+        repositorio=None,
     ) -> None:
         self.catalogo = catalogo
         self.reloj = reloj
+        self.repositorio = repositorio
         self.reservas: list[dict] = []
         self.avisos_dueno: list[dict] = []
+        if repositorio is not None:
+            try:
+                self.reservas = repositorio.cargar()
+                logging.warning("Reservas leídas de la base: %s", len(self.reservas))
+            except Exception:
+                logging.exception("No se pudieron leer las reservas de la base")
 
     def reservas_activas(self) -> list[dict]:
         """Reservas que no han vencido (las de efectivo vencen a las 24 h)."""
@@ -186,6 +199,17 @@ class Tienda:
             color=elegido, chat_id=chat_id, numero=f"R-{len(self.reservas) + 1:04d}"
         )
         self.reservas.append(reserva)
+        if self.repositorio is not None:
+            try:
+                self.repositorio.guardar(reserva)
+            except Exception:
+                # La reserva sigue en memoria; el dueño la ve en el panel.
+                logging.exception("No se pudo guardar %s en la base", reserva["numero"])
+                self.avisos_dueno.append({
+                    "chat_id": chat_id,
+                    "motivo": f"{reserva['numero']} no quedó guardada en la base",
+                    "hora": self.reloj(),
+                })
         return reserva
 
     def ejecutar(self, nombre: str, entrada: dict, chat_id: str) -> tuple[str, bool]:
