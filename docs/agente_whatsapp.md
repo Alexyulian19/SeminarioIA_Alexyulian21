@@ -63,6 +63,23 @@ No es necesario para la entrega (el profesor pide el sistema funcional en local)
 El servidor revisa la firma `X-Hub-Signature-256` de cada aviso y no responde
 dos veces el mismo mensaje si Meta lo reenvía.
 
+## C. Demo pública (para que otra persona lo pruebe desde su celular)
+
+El servidor se publica gratis en Render con `render.yaml` (Blueprint).
+Variables que se escriben en el panel de Render, nunca en el repo:
+`ANTHROPIC_API_KEY` y `PANEL_CLAVE` (la clave del panel del dueño).
+
+- Chat público: `https://<servicio>.onrender.com/`
+- Chat con un mensaje ya escrito (lo usa el botón del catálogo):
+  `https://<servicio>.onrender.com/?mensaje=Hola,%20me%20interesa%20th-08`
+- Panel del dueño: `https://<servicio>.onrender.com/?panel=<PANEL_CLAVE>`.
+  Sin la clave, `/api/reservas` responde 403 y el panel no se muestra.
+- Topes de gasto: 30 mensajes por chat y 400 en total mientras el servidor
+  esté prendido (`MAX_MENSAJES_POR_CHAT`, `MAX_MENSAJES_TOTAL`). Además, pon
+  un límite de gasto en console.anthropic.com.
+- El plan gratis se duerme a los 15 minutos sin uso: el primer mensaje puede
+  tardar cerca de 1 minuto. Ábrelo unos minutos antes de mostrarlo.
+
 ## Supuestos y límites (para revisar)
 
 - **Cantidad vacía = 5.** La columna `cantidad` del catálogo hoy está vacía
