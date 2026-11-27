@@ -1,0 +1,14 @@
+# Despliegue de la demo pública en Render (plan gratis).
+# Las claves NO van aquí: se escriben en el panel de Render (sync: false).
+services:
+  - type: web
+    name: urban-agente
+    runtime: python
+    plan: free
+    buildCommand: pip install -r requirements.txt
+    startCommand: uvicorn app.servidor:crear_app --factory --host 0.0.0.0 --port $PORT
+    envVars:
+      - key: ANTHROPIC_API_KEY
+        sync: false
+      - key: PANEL_CLAVE
+        sync: false

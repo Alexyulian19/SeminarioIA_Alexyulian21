@@ -15,7 +15,7 @@ from pathlib import Path
 
 import httpx
 from dotenv import load_dotenv
-from fastapi import FastAPI, HTTPException, Query, Request
+from fastapi import FastAPI, Header, HTTPException, Query, Request
 from fastapi.responses import FileResponse, PlainTextResponse
 from pydantic import BaseModel, Field
 from starlette.concurrency import run_in_threadpool
@@ -28,6 +28,32 @@ RAIZ = Path(__file__).resolve().parent.parent
 PAGINA_CHAT = Path(__file__).parent / "web" / "chat.html"
 CATALOGO_POR_DEFECTO = RAIZ / "datos" / "catalogo.csv"
 VERSION_GRAPH = "v23.0"
+# Topes para que una demo pública no gaste todo el saldo de la API.
+MAX_POR_CHAT = 30
+MAX_TOTAL = 400
+MENSAJE_LIMITE = (
+    "Por ahora llegamos al límite de mensajes de esta demo. "
+    "Escríbenos al almacén y con gusto te atendemos."
+)
+
+
+class Limitador:
+    """Cuenta mensajes por chat y en total, y dice si todavía se pueden atender."""
+
+    def __init__(self, max_por_chat: int, max_total: int) -> None:
+        self.max_por_chat = max_por_chat
+        self.max_total = max_total
+        self.total = 0
+        self.por_chat: dict[str, int] = {}
+
+    def permitir(self, chat_id: str) -> bool:
+        """Cuenta el mensaje si está dentro de los topes; si no, devuelve False."""
+        usados = self.por_chat.get(chat_id, 0)
+        if self.total >= self.max_total or usados >= self.max_por_chat:
+            return False
+        self.total += 1
+        self.por_chat[chat_id] = usados + 1
+        return True
 
 
 class MensajeChat(BaseModel):
@@ -120,6 +146,8 @@ def crear_app(
     enviar: Callable[[str, str], None] | None = None,
     verify_token: str | None = None,
     app_secret: str | None = None,
+    panel_clave: str | None = None,
+    limitador: Limitador | None = None,
 ) -> FastAPI:
     """Arma la aplicación. Sin argumentos, lee todo del .env (uso real).
 
@@ -128,6 +156,8 @@ def crear_app(
         enviar: función (numero, texto) que responde por WhatsApp; None = no envía.
         verify_token: WHATSAPP_VERIFY_TOKEN para verificar el webhook.
         app_secret: WHATSAPP_APP_SECRET para revisar la firma; None = no revisa.
+        panel_clave: PANEL_CLAVE para ver el panel del dueño; None = panel apagado.
+        limitador: topes de mensajes; por defecto MAX_POR_CHAT y MAX_TOTAL.
     """
     if agente is None:
         load_dotenv(RAIZ / ".env")
@@ -139,6 +169,18 @@ def crear_app(
         phone_id = os.getenv("WHATSAPP_PHONE_NUMBER_ID")
         if token and phone_id:
             enviar = crear_enviador(token, phone_id)
+        panel_clave = os.getenv("PANEL_CLAVE")
+        limitador = Limitador(
+            int(os.getenv("MAX_MENSAJES_POR_CHAT") or MAX_POR_CHAT),
+            int(os.getenv("MAX_MENSAJES_TOTAL") or MAX_TOTAL),
+        )
+    limitador = limitador or Limitador(MAX_POR_CHAT, MAX_TOTAL)
+
+    def responder(chat_id: str, texto: str) -> str:
+        if not limitador.permitir(chat_id):
+            logging.warning("Límite de mensajes alcanzado (chat ...%s)", chat_id[-4:])
+            return MENSAJE_LIMITE
+        return agente.responder(chat_id, texto)
 
     app = FastAPI(title="Agente de WhatsApp de Urban")
     vistos: set[str] = set()
@@ -149,10 +191,14 @@ def crear_app(
 
     @app.post("/api/chat")
     def chat_local(mensaje: MensajeChat) -> dict:
-        return {"respuesta": agente.responder(mensaje.chat_id, mensaje.texto)}
+        return {"respuesta": responder(mensaje.chat_id, mensaje.texto)}
 
     @app.get("/api/reservas")
-    def ver_reservas() -> dict:
+    def ver_reservas(
+        clave: str = Header("", alias="X-Clave-Panel"),
+    ) -> dict:
+        if not panel_clave or not hmac.compare_digest(clave, panel_clave):
+            raise HTTPException(status_code=403, detail="Panel solo para el dueño")
         activas = agente.tienda.reservas_activas()
         return {
             "reservas": [
@@ -200,7 +246,7 @@ def crear_app(
                 continue  # Meta reenvía el mismo aviso si tardamos en contestar.
             vistos.add(mensaje["id"])
             respuesta = await run_in_threadpool(
-                agente.responder, mensaje["de"], mensaje["texto"]
+                responder, mensaje["de"], mensaje["texto"]
             )
             if enviar:
                 await run_in_threadpool(enviar, mensaje["de"], respuesta)

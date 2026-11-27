@@ -35,21 +35,26 @@
 </head>
 <body>
 <div class="telefono">
-  <header><b>Urban · Asistente</b><small>Chat de prueba en local (no es WhatsApp real)</small></header>
+  <header><b>Urban · Asistente</b><small>Asistente virtual · responde al instante</small></header>
   <div id="mensajes"></div>
   <form id="formulario">
     <input id="texto" autocomplete="off" placeholder="Escribe un mensaje" maxlength="1000">
     <button>Enviar</button>
   </form>
 </div>
-<aside>
+<aside id="panel" hidden>
   <h2>Panel del dueño</h2>
   <p>Reservas activas y avisos para el equipo (se actualiza solo).</p>
   <h3>Reservas</h3><ul id="reservas"></ul>
   <h3>Avisos al dueño</h3><ul id="avisos"></ul>
 </aside>
 <script>
-  const chatId = "prueba-" + Math.random().toString(36).slice(2, 8);
+  const parametros = new URLSearchParams(location.search);
+  // El panel del dueño solo se muestra con ?panel=CLAVE (la revisa el servidor).
+  const clavePanel = parametros.get("panel") || "";
+  let chatId = "web-" + Math.random().toString(36).slice(2, 10);
+  try { chatId = sessionStorage.getItem("chatId") || chatId;
+        sessionStorage.setItem("chatId", chatId); } catch (e) { /* sin almacenamiento */ }
   const lista = document.getElementById("mensajes");
 
   // Negrilla al estilo WhatsApp (*texto*) sin usar innerHTML.
@@ -76,8 +81,12 @@
   }
 
   async function actualizarPanel() {
+    if (!clavePanel) return;
     try {
-      const datos = await (await fetch("/api/reservas")).json();
+      const r = await fetch("/api/reservas", {headers: {"X-Clave-Panel": clavePanel}});
+      if (!r.ok) return;
+      document.getElementById("panel").hidden = false;
+      const datos = await r.json();
       const ul = document.getElementById("reservas");
       ul.replaceChildren(...datos.reservas.map(r => {
         const li = document.createElement("li");
@@ -120,6 +129,9 @@
   });
 
   burbuja("¡Hola! Soy el asistente de Urban. Pregúntame por tenis, busos, jeans, gorras…", "agente");
+  // El catálogo web abre el chat con ?mensaje=... ya escrito (el cliente lo envía).
+  const mensajeInicial = parametros.get("mensaje");
+  if (mensajeInicial) document.getElementById("texto").value = mensajeInicial.slice(0, 1000);
   actualizarPanel();
   setInterval(actualizarPanel, 5000);
 </script>
