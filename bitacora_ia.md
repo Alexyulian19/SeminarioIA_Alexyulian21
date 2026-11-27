@@ -256,3 +256,14 @@ La próxima vez me gustaría proponer yo mismo las pruebas que pueda identificar
   3. `APIConnectionError` con Anthropic: la clave había quedado mal copiada. La volví a pegar y respondió.
 - **Lo que aprendí:** que las pruebas estén en verde no garantiza que la configuración esté bien. Los tres incidentes fueron de configuración (variables y claves), no de código, y solo aparecieron al probar el sistema completo de verdad.
 - **Commit relacionado:** PR #7 (`semana10-agente`) y PR #8 (`semana10-supabase`); esta entrada va en la rama `semana10-cierre`.
+
+## Entrada: el agente no encontraba productos del catálogo web (semana 10)
+
+- **Fecha:** 2026-11-27
+- **Problema real:** En el catálogo publicado elegí «[bu-09] Camibuso Polo Dolce & Gabbana negro talla M»; el botón abrió el chat y el agente respondió que no lo encontraba «ni por el código ni por el nombre».
+- **Causa:** el agente leía `datos/catalogo.csv`, que era la copia vieja del catálogo (29 productos, sin `bu-09`). La web ya usaba el catálogo v5 (71 productos). Las pruebas pasaban porque ninguna comparaba el CSV del agente con el de la web.
+- **Qué hizo la IA:** copió el CSV de la web v5 en `datos/catalogo.csv`; hizo la búsqueda más tolerante (quita corchetes, comas y paréntesis; si el mensaje trae un código del catálogo, busca por el código) y limpia el código y la talla en `consultar_prenda` y `crear_reserva` (`[BU-09]` → `bu-09`, `m` → `M`). Agregó `tests/test_catalogo_real.py`: cada uno de los 71 productos se encuentra por código, por nombre y con el mensaje exacto del botón (218 pruebas nuevas).
+- **Decisión:** _(por llenar: acepto / cambio algo)_
+- **Verificación:** `pytest --cov`: 379 passed, cobertura 100 %; `ruff check .` limpio. Prueba real en Render: _(por llenar)_
+- **Lo que aprendí:** _(por llenar)_
+- **Commit relacionado:** rama `semana10-catalogo-v5`
