@@ -1,0 +1,7 @@
+codigo,nombre,categoria,tipo,marca,calidad,color,talla,precio,precio_antes,disponible,cantidad,foto_url,foto_real
+th-08,Adidas Campus,tenis,Tenis hombre,Adidas,AAA,Suela blanca,40,130000,150000,SI,,x.webp,SI
+th-08,Adidas Campus,tenis,Tenis hombre,Adidas,AAA,Suela blanca,41,130000,150000,SI,,x.webp,SI
+th-08,Adidas Campus,tenis,Tenis hombre,Adidas,AAA,Suela beige,41,135000,,SI,2,x.webp,SI
+je-01,Jean azul clásico,jeans,Jean,[MARCA],1.1,,32,90000,,SI,2,x.svg,NO
+go-01,Gorra negra,gorras,Gorra,[MARCA],AAA,,UNICA,0,,SI,,x.svg,NO
+bu-01,Buso negro cuello redondo,busos,Buso,[MARCA],AAA,,M,85000,,NO,4,x.svg,NO
