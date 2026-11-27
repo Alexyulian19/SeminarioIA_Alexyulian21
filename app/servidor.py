@@ -23,6 +23,7 @@ from starlette.concurrency import run_in_threadpool
 from app.agente import Agente, crear_cliente_claude
 from app.catalogo import cargar_catalogo
 from app.herramientas import Tienda
+from app.repositorio import RepositorioSupabase
 
 RAIZ = Path(__file__).resolve().parent.parent
 PAGINA_CHAT = Path(__file__).parent / "web" / "chat.html"
@@ -162,7 +163,10 @@ def crear_app(
     if agente is None:
         load_dotenv(RAIZ / ".env")
         catalogo = cargar_catalogo(os.getenv("CATALOGO_CSV") or CATALOGO_POR_DEFECTO)
-        agente = Agente(crear_cliente_claude(), Tienda(catalogo))
+        url, clave = os.getenv("SUPABASE_URL"), os.getenv("SUPABASE_KEY")
+        repositorio = RepositorioSupabase(url, clave) if url and clave else None
+        tienda = Tienda(catalogo, repositorio=repositorio)
+        agente = Agente(crear_cliente_claude(), tienda)
         verify_token = os.getenv("WHATSAPP_VERIFY_TOKEN")
         app_secret = os.getenv("WHATSAPP_APP_SECRET")
         token = os.getenv("WHATSAPP_TOKEN")

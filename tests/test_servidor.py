@@ -28,6 +28,13 @@ def firmar(cuerpo: bytes) -> str:
     return "sha256=" + hmac.new(SECRETO.encode(), cuerpo, hashlib.sha256).hexdigest()
 
 
+@pytest.fixture(autouse=True)
+def sin_supabase(monkeypatch):
+    """Las pruebas nunca usan la base real, aunque el .env tenga las claves."""
+    monkeypatch.setenv("SUPABASE_URL", "")
+    monkeypatch.setenv("SUPABASE_KEY", "")
+
+
 @pytest.fixture
 def armado(catalogo_prueba):
     cliente = ClienteFalso(*(respuesta("end_turn", texto("Hola, soy Urban"))
@@ -272,3 +279,25 @@ def test_limites_desde_el_entorno(monkeypatch):
     assert r.json()["respuesta"] == servidor.MENSAJE_LIMITE
     panel = http.get("/api/reservas", headers={"X-Clave-Panel": "abc"})
     assert panel.status_code == 200
+
+
+def test_con_supabase_configurado_usa_el_repositorio(monkeypatch):
+    monkeypatch.setenv("ANTHROPIC_API_KEY", "clave-falsa-de-prueba")
+    monkeypatch.setenv("SUPABASE_URL", "https://demo.supabase.co")
+    monkeypatch.setenv("SUPABASE_KEY", "sb_secret_prueba")
+    monkeypatch.setenv("PANEL_CLAVE", "abc")
+
+    class Vacio:
+        def json(self):
+            return []
+
+        def raise_for_status(self):
+            return None
+
+    pedidas = []
+    monkeypatch.setattr(servidor.httpx, "get",
+                        lambda url, **o: pedidas.append(url) or Vacio())
+    http = TestClient(servidor.crear_app())
+    assert pedidas == ["https://demo.supabase.co/rest/v1/reserva"]
+    panel = http.get("/api/reservas", headers={"X-Clave-Panel": "abc"})
+    assert panel.json()["reservas"] == []
