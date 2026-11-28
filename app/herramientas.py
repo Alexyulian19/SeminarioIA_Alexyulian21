@@ -11,7 +11,7 @@ from collections.abc import Callable
 from datetime import datetime, timedelta, timezone
 
 from app.buscar_prenda import PrendaNoEncontrada, buscar_prenda
-from app.catalogo import buscar_productos, colores_de, normalizar
+from app.catalogo import buscar_productos, colores_de, limpiar_codigo, normalizar
 from app.reservar import ReservaRechazada, crear_reserva
 from app.reservas import reserva_vencida
 
@@ -179,6 +179,7 @@ class Tienda:
 
     def consultar_prenda(self, codigo: str, talla: str, color: str) -> dict:
         """HU-01 con color: usa buscar_prenda sobre las filas de ese color."""
+        codigo, talla = limpiar_codigo(codigo), talla.strip().upper()
         filas, elegido = self._filas_del_color(codigo, color)
         prenda = buscar_prenda(
             filas, self._reservas_del_color(codigo, elegido), codigo, talla
@@ -190,6 +191,7 @@ class Tienda:
         forma_pago: str, cliente: str, chat_id: str,
     ) -> dict:
         """HU-05 con color: usa crear_reserva y guarda la reserva en memoria."""
+        codigo, talla = limpiar_codigo(codigo), talla.strip().upper()
         filas, elegido = self._filas_del_color(codigo, color)
         reserva = crear_reserva(
             filas, self._reservas_del_color(codigo, elegido), codigo, talla,
